@@ -23,7 +23,7 @@ def test_PD001_fail_no_as():
     statement = "import pandas"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
-    expected = [PD001(1, 1)]
+    expected = [PD001(1, 0)]
     assert actual == expected
 
 
@@ -34,5 +34,5 @@ def test_PD001_fail_wrong_alias():
     statement = "import pandas as foo"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
-    expected = [PD001(1, 1)]
+    expected = [PD001(1, 0)]
     assert actual == expected
