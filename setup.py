@@ -25,7 +25,7 @@ setuptools.setup(
     tests_require=tests_requires,
     entry_points={
         flake8_entry_point: [
-            'PD00 = pandas_vet:VetPlugin',
+            'PD = pandas_vet:VetPlugin',
         ],
     },
     classifiers=[
