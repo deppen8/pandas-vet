@@ -17,7 +17,6 @@ class VetPlugin:
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 Error = partial(partial, error, type=VetPlugin)
 
-
 PD001 = Error(
-    "pandas should always be imported as 'import pandas as pd'"
+    message="PD001 pandas should always be imported as 'import pandas as pd'"
 )
