@@ -56,6 +56,20 @@ def check_inplace_false(node: ast.Import) -> List:
     return errors
 
 
+#def check_isnull_false(node: ast.Import) -> List:
+#    errors = []
+#    for kw in node.keywords:
+#        if kw.arg == "isnull" and kw.value.value is True:
+#            errors.append(PD003(node.lineno, node.col_offset))
+#    return errors
+#def check_notnull_false(node: ast.Import) -> List:
+#    errors = []
+#    for kw in node.keywords:
+#        if kw.arg == "notnull" and kw.value.value is True:
+#            errors.append(PD004(node.lineno, node.col_offset))
+#    return errors
+
+
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
 
