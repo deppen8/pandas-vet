@@ -8,11 +8,20 @@ import attr
 
 @attr.s
 class Visitor(ast.NodeVisitor):
+    """
+    ast.NodeVisitor will automatically call the appropriate method for a given node type
+
+    i.e. calling self.visit on an Import node calls visit_import
+    """
     errors = attr.ib(default=attr.Factory(list))
 
     def visit_Import(self, node):
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_import_name(node))
+
+    def visit_Call(self, node):
+        self.generic_visit(node)  # continue checking children
+        self.errors.extend(check_inplace_false(node))
 
     def check(self, node):
         self.errors = []
@@ -39,6 +48,14 @@ def check_import_name(node: ast.Import) -> List:
     return errors
 
 
+def check_inplace_false(node: ast.Import) -> List:
+    errors = []
+    for kw in node.keywords:
+        if kw.arg == "inplace" and kw.value.value is True:
+            errors.append(PD002(node.lineno, node.col_offset))
+    return errors
+
+
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 Error = partial(partial, error, type=VetPlugin)
 
@@ -46,7 +63,7 @@ PD001 = Error(
     message="PD001 pandas should always be imported as 'import pandas as pd'"
 )
 PD002 = Error(
-    "'inplace = True' should be avoided; it has inconsistent behavior"
+    message="'inplace = True' should be avoided; it has inconsistent behavior"
 )
 PD003 = Error(
     "'.isna' is preferred to '.isnull'; functionality is equivalent"
