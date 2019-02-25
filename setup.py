@@ -4,6 +4,10 @@ requires = [
     "flake8 > 3.0.0",
 ]
 
+tests_requires = [
+    "pytest > 4.0.0"
+]
+
 flake8_entry_point = 'flake8.extension'
 
 setuptools.setup(
@@ -18,6 +22,7 @@ setuptools.setup(
         "pandas_vet",
     ],
     install_requires=requires,
+    tests_require=tests_requires,
     entry_points={
         flake8_entry_point: [
             'PD00 = pandas_vet:VetPlugin',
