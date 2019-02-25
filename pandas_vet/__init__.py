@@ -57,23 +57,23 @@ def check_inplace_false(node: ast.Import) -> List:
 
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
-Error = partial(partial, error, type=VetPlugin)
+VetError = partial(partial, error, type=VetPlugin)
 
-PD001 = Error(
+PD001 = VetError(
     message="PD001 pandas should always be imported as 'import pandas as pd'"
 )
-PD002 = Error(
+PD002 = VetError(
     message="'inplace = True' should be avoided; it has inconsistent behavior"
 )
-PD003 = Error(
-    "'.isna' is preferred to '.isnull'; functionality is equivalent"
+PD003 = VetError(
+    message="'.isna' is preferred to '.isnull'; functionality is equivalent"
 )
-PD004 = Error(
-    "'.notna' is preferred to '.notnull'; functionality is equivalent"
+PD004 = VetError(
+    message="'.notna' is preferred to '.notnull'; functionality is equivalent"
 )
-PD005 = Error(
-    "Use arithmetic operator instead of method"
+PD005 = VetError(
+    message="Use arithmetic operator instead of method"
 )
-PD006 = Error(
-    "Use comparison operator instead of method"
+PD006 = VetError(
+    message="Use comparison operator instead of method"
 )
