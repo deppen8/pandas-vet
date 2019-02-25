@@ -117,3 +117,6 @@ dmypy.json
 
 # VS Code
 .vscode/
+
+# direnv
+.envrc
