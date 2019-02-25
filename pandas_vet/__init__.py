@@ -1,5 +1,23 @@
+import ast
 from collections import namedtuple
 from functools import partial
+from typing import List
+
+import attr
+
+
+@attr.s
+class Visitor(ast.NodeVisitor):
+    errors = attr.ib(default=attr.Factory(list))
+
+    def visit_Import(self, node):
+        self.generic_visit(node)  # continue checking children
+        self.errors.extend(check_import_name(node))
+
+    def check(self, node):
+        self.errors = []
+        self.visit(node)
+        return self.errors
 
 
 class VetPlugin:
@@ -10,16 +28,22 @@ class VetPlugin:
         self.tree = tree
 
     def run(self):
-        for message in []:
-            yield message
+        return Visitor().check(self.tree)
+
+
+def check_import_name(node: ast.Import) -> List:
+    errors = []
+    for n in node.names:
+        if n.name == "pandas" and n.asname != "pd":
+            errors.append(PD001(node.lineno, node.col_offset))
+    return errors
 
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 Error = partial(partial, error, type=VetPlugin)
 
-
 PD001 = Error(
-    "pandas should always be imported as 'import pandas as pd'"
+    message="PD001 pandas should always be imported as 'import pandas as pd'"
 )
 PD002 = Error(
     "'inplace = True' should be avoided; it has inconsistent behavior"
