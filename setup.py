@@ -15,13 +15,12 @@ setuptools.setup(
     author_email="deppen.8@gmail.com",
     url="https://github.com/deppen8/pandas-vet",
     packages=[
-        "pandas-vet",
+        "pandas_vet",
     ],
     install_requires=requires,
     entry_points={
         flake8_entry_point: [
-            # START HERE
-            # 'PD00 = flake8_example:ExamplePlugin',
+            'PD00 = pandas_vet:VetPlugin',
         ],
     },
     classifiers=[
