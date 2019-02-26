@@ -27,6 +27,8 @@ The plugin is on PyPI and can be installed with:
 pip install pandas-vet
 ```
 
+`pandas-vet` is tested under Python 3.5 and 3.6 and should work with later versions as well.
+
 ## Usage
 
 Once installed successfully in an environment that also has `flake8` installed, `pandas-vet` should run whenever `flake8` is run.
