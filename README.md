@@ -45,3 +45,14 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 ### Code of Conduct
 
 Because this project started during the PyCascades 2019 sprints, we adopt the PyCascades minimal expectation that we "Be excellent to each another". Beyond that, we follow the Python Software Foundation's [Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
+
+## Contributors
+
+### PyCascades 2019 sprints team
+
+Sam Beck
+[Jacob Deppen](https://twitter.com/jacob_deppen)
+Walt Javins
+Charles Simchick
+Aly Sivji
+Tim Smith
