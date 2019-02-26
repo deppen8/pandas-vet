@@ -1,5 +1,10 @@
 # pandas-vet
 
+[![Build Status](https://travis-ci.org/deppen8/pandas-vet.svg?branch=master)](https://travis-ci.org/deppen8/pandas-vet)
+[![PyPI - Status](https://img.shields.io/pypi/status/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
+[![PyPI](https://img.shields.io/pypi/v/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
+[![PyPI - License](https://img.shields.io/pypi/l/pandas-vet.svg)](https://github.com/deppen8/pandas-vet/blob/master/LICENSE)
+
 `pandas-vet` is a plugin for `flake8` that provides opinionated linting for `pandas` code.
 
 It began as a project during the PyCascades 2019 sprints.
@@ -7,6 +12,8 @@ It began as a project during the PyCascades 2019 sprints.
 ## Motivation
 
 Starting with `pandas` can be daunting. The usual internet help sites are littered with different ways to do the same thing and some features that the `pandas` docs themselves discourage live on in the API. `pandas-vet` is (hopefully) a way to help make `pandas` a little more friendly for newcomers by taking some opinionated stances about `pandas` best practices. It is designed to help users reduce the `pandas` universe.
+
+The idea to create a linter was sparked by [Ania Kapuścińska](https://twitter.com/lambdanis)'s talk at PyCascades 2019, ["Lint your code responsibly!"](https://youtu.be/hAnCiTpxXPg?t=21814).
 
 Many of the opinions stem from [Ted Petrou's](https://twitter.com/TedPetrou) excellent [Minimally Sufficient Pandas](https://medium.com/dunder-data/minimally-sufficient-pandas-a8e67f2a2428). Other ideas are drawn from `pandas` docs or elsewhere. The [Pandas in Black and White](https://deppen8.github.io/pandas-bw/) flashcards have a lot of the same opinions too.
 
@@ -43,3 +50,14 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 ### Code of Conduct
 
 Because this project started during the PyCascades 2019 sprints, we adopt the PyCascades minimal expectation that we "Be excellent to each another". Beyond that, we follow the Python Software Foundation's [Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
+
+## Contributors
+
+### PyCascades 2019 sprints team
+
+- Sam Beck
+- [Jacob Deppen](https://twitter.com/jacob_deppen)
+- Walt Javins
+- Charles Simchick
+- Aly Sivji
+- Tim Smith
