@@ -35,9 +35,15 @@ See the [`flake8` docs](http://flake8.pycqa.org/en/latest/user/invocation.html) 
 
 `pandas-vet` is still in the very early stages. Contributions are welcome from the community on code, tests, docs, and just about anything else.
 
-Please submit an issue (or draft PR) first describing the types of changes you'd like to implement.
+### Steps to contributing
 
-We use pytest and flake8 to validate our codebase. The TravisCI integration will complain on Pull Requests if there are any failing tests or lint violations. To check these locally, run the following commands:
+1. Please submit an issue (or draft PR) first describing the types of changes you'd like to implement.
+
+2. Fork the repo and create a new branch for your enhancement/fix.
+
+3. Write code, docs, etc.
+
+4. We use `pytest` and `flake8` to validate our codebase. The TravisCI integration will complain on pull requests if there are any failing tests or lint violations. To check these locally, run the following commands:
 
 ```bash
 pytest tests
@@ -46,6 +52,12 @@ pytest tests
 ```bash
 flake8 pandas_vet setup.py tests --exclude tests/data
 ```
+
+5. Push to your forked repo.
+
+6. Submit pull request to the parent repo from your branch. Be sure to write a clear message and reference the Issue # that relates to your pull request.
+
+7. Feel good about giving back to open source projects.
 
 ### Code of Conduct
 
