@@ -5,6 +5,8 @@ from typing import List
 
 import attr
 
+from .version import __version__
+
 
 @attr.s
 class Visitor(ast.NodeVisitor):
@@ -31,7 +33,7 @@ class Visitor(ast.NodeVisitor):
 
 class VetPlugin:
     name = "flake8-pandas-vet"
-    version = "0.1.0"
+    version = __version__
 
     def __init__(self, tree):
         self.tree = tree
