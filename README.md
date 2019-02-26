@@ -1,5 +1,10 @@
 # pandas-vet
 
+[![Build Status](https://travis-ci.org/deppen8/pandas-vet.svg?branch=master)](https://travis-ci.org/deppen8/pandas-vet)
+[![PyPI - Status](https://img.shields.io/pypi/status/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
+[![PyPI](https://img.shields.io/pypi/v/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
+[![PyPI - License](https://img.shields.io/pypi/l/pandas-vet.svg)](https://github.com/deppen8/pandas-vet/blob/master/LICENSE)
+
 `pandas-vet` is a plugin for `flake8` that provides opinionated linting for `pandas` code.
 
 It began as a project during the PyCascades 2019 sprints.
