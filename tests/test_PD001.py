@@ -2,7 +2,7 @@
 import ast
 
 from pandas_vet import VetPlugin
-from pandas_vet import PD001, PD002
+from pandas_vet import PD001, PD002, PD003, PD004
 
 
 def test_PD001_pass():
@@ -58,3 +58,49 @@ def test_PD002_fail():
     actual = list(VetPlugin(tree).run())
     expected = [PD002(1, 0)]
     assert actual == expected
+
+
+def test_PD003_pass():
+    """
+    Test that using .isna() explicitly does not result in an error.
+    """
+    statement = "nas = pd.isna(val)"
+    tree = ast.parse(statement)
+    actual = list(VetPlugin(tree).run())
+    expected = []
+    assert actual == expected
+
+
+def test_PD003_fail():
+    """
+    Test that using .isnull() results in an error.
+    """
+    statement = "nulls = pd.isnull(val)"
+    tree = ast.parse(statement)
+    actual = list(VetPlugin(tree).run())
+    expected = [PD003(1, 8)]
+    assert actual == expected
+
+
+def test_PD004_pass():
+    """
+    Test that using .notna() explicitly does not result in an error.
+    """
+    statement = "notnas = pd.notna(val)"
+    tree = ast.parse(statement)
+    actual = list(VetPlugin(tree).run())
+    expected = []
+    assert actual == expected
+
+
+def test_PD004_fail():
+    """
+    Test that using .notnull() results in an error.
+    """
+    statement = "notnulls = pd.notnull(val)"
+    tree = ast.parse(statement)
+    actual = list(VetPlugin(tree).run())
+    expected = [PD004(1, 11)]
+    assert actual == expected
+
+
