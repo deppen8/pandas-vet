@@ -59,6 +59,14 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 
 7. Feel good about giving back to open source projects.
 
+### How to add a check to the linter
+
+1. Write tests. At a *minimum*, you should have test cases where the linter should catch "bad" `pandas` and test cases where the linter should allow "good" `pandas`.
+
+2. Write your check function in `/pandas-vet/__init__.py`.
+
+3. Run `flake8` and `pytest` on the linter itself (see [Steps to contributing](#steps-to-contributing))
+
 ### Code of Conduct
 
 Because this project started during the PyCascades 2019 sprints, we adopt the PyCascades minimal expectation that we "Be excellent to each another". Beyond that, we follow the Python Software Foundation's [Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
