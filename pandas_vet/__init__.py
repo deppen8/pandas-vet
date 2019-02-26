@@ -22,8 +22,8 @@ class Visitor(ast.NodeVisitor):
     def visit_Call(self, node):
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_inplace_false(node))
-        self.errors.extend(check_isnull_false(node))
-        self.errors.extend(check_notnull_false(node))
+        self.errors.extend(check_for_isnull(node))
+        self.errors.extend(check_for_notnull(node))
 
     def check(self, node):
         self.errors = []
@@ -58,14 +58,14 @@ def check_inplace_false(node: ast.Call) -> List:
     return errors
 
 
-def check_isnull_false(node: ast.Call) -> List:
+def check_for_isnull(node: ast.Call) -> List:
     errors = []
     if node.func.attr == "isnull":
         errors.append(PD003(node.lineno, node.col_offset))
     return errors
 
 
-def check_notnull_false(node: ast.Call) -> List:
+def check_for_notnull(node: ast.Call) -> List:
     errors = []
     if node.func.attr == "notnull":
         errors.append(PD004(node.lineno, node.col_offset))
