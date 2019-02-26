@@ -33,7 +33,7 @@ See the [`flake8` docs](http://flake8.pycqa.org/en/latest/user/invocation.html) 
 
 ## Contributing
 
-`pandas-vet` is still in the very early stages. Contributions are welcome from the community on codes, tests, docs, and just about anything else. 
+`pandas-vet` is still in the very early stages. Contributions are welcome from the community on code, tests, docs, and just about anything else.
 
 Please submit an issue (or draft PR) first describing the types of changes you'd like to implement.
 
