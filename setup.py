@@ -10,6 +10,9 @@ tests_requires = [
 
 flake8_entry_point = 'flake8.extension'
 
+with open("README.md", "rt") as f:
+    long_description = f.read()
+
 setuptools.setup(
     name="pandas-vet",
     license="MIT",
@@ -40,4 +43,6 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Software Development :: Quality Assurance",
     ],
+    long_description=long_description,
+    long_description_content_type="text/markdown",
 )
