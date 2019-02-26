@@ -64,7 +64,7 @@ def test_PD003_pass():
     """
     Test that using .isna() explicitly does not result in an error.
     """
-    statement = "if pd.isna():"
+    statement = "nas = pd.isna(val)"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = []
@@ -75,10 +75,10 @@ def test_PD003_fail():
     """
     Test that using .isnull() results in an error.
     """
-    statement = "if pd.isnull():"
+    statement = "nulls = pd.isnull(val)"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
-    expected = [PD003(1, 0)]
+    expected = [PD003(1, 8)]
     assert actual == expected
 
 
@@ -86,7 +86,7 @@ def test_PD004_pass():
     """
     Test that using .notna() explicitly does not result in an error.
     """
-    statement = "if pd.notna():"
+    statement = "notnas = pd.notna(val)"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = []
@@ -97,10 +97,10 @@ def test_PD004_fail():
     """
     Test that using .notnull() results in an error.
     """
-    statement = "if pd.notnull():"
+    statement = "notnulls = pd.notnull(val)"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
-    expected = [PD004(1, 0)]
+    expected = [PD004(1, 11)]
     assert actual == expected
 
 

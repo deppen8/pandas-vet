@@ -22,6 +22,8 @@ class Visitor(ast.NodeVisitor):
     def visit_Call(self, node):
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_inplace_false(node))
+        self.errors.extend(check_isnull_false(node))
+        self.errors.extend(check_notnull_false(node))
 
     def check(self, node):
         self.errors = []
@@ -48,7 +50,7 @@ def check_import_name(node: ast.Import) -> List:
     return errors
 
 
-def check_inplace_false(node: ast.Import) -> List:
+def check_inplace_false(node: ast.Call) -> List:
     errors = []
     for kw in node.keywords:
         if kw.arg == "inplace" and kw.value.value is True:
@@ -56,18 +58,18 @@ def check_inplace_false(node: ast.Import) -> List:
     return errors
 
 
-#def check_isnull_false(node: ast.Import) -> List:
-#    errors = []
-#    for kw in node.keywords:
-#        if kw.arg == "isnull" and kw.value.value is True:
-#            errors.append(PD003(node.lineno, node.col_offset))
-#    return errors
-#def check_notnull_false(node: ast.Import) -> List:
-#    errors = []
-#    for kw in node.keywords:
-#        if kw.arg == "notnull" and kw.value.value is True:
-#            errors.append(PD004(node.lineno, node.col_offset))
-#    return errors
+def check_isnull_false(node: ast.Call) -> List:
+    errors = []
+    if node.func.attr == "isnull":
+        errors.append(PD003(node.lineno, node.col_offset))
+    return errors
+
+
+def check_notnull_false(node: ast.Call) -> List:
+    errors = []
+    if node.func.attr == "notnull":
+        errors.append(PD004(node.lineno, node.col_offset))
+    return errors
 
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
