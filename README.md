@@ -35,6 +35,10 @@ See the [`flake8` docs](http://flake8.pycqa.org/en/latest/user/invocation.html) 
 
 `pandas-vet` is still in the very early stages. Contributions are welcome from the community on code, tests, docs, and just about anything else.
 
+### Code of Conduct
+
+Because this project started during the PyCascades 2019 sprints, we adopt the PyCascades minimal expectation that we "Be excellent to each another". Beyond that, we follow the Python Software Foundation's [Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
+
 ### Steps to contributing
 
 1. Please submit an issue (or draft PR) first describing the types of changes you'd like to implement.
@@ -67,9 +71,6 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 
 3. Run `flake8` and `pytest` on the linter itself (see [Steps to contributing](#steps-to-contributing))
 
-### Code of Conduct
-
-Because this project started during the PyCascades 2019 sprints, we adopt the PyCascades minimal expectation that we "Be excellent to each another". Beyond that, we follow the Python Software Foundation's [Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
 
 ## Contributors
 
