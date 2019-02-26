@@ -59,5 +59,5 @@ Because this project started during the PyCascades 2019 sprints, we adopt the Py
 - [Jacob Deppen](https://twitter.com/jacob_deppen)
 - Walt Javins
 - Charles Simchick
-- Aly Sivji
+- [Aly Sivji](https://twitter.com/CaiusSivjus)
 - Tim Smith
