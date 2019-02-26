@@ -21,6 +21,14 @@ Many of the opinions stem from [Ted Petrou's](https://twitter.com/TedPetrou) exc
 
 `pandas-vet` is a plugin for `flake8`. If you don't have `flake8` already, it will install automatically when you install `pandas-vet`.
 
+The plugin is on PyPI and can be installed with:
+
+```bash
+pip install pandas-vet
+```
+
+`pandas-vet` is tested under Python 3.5 and 3.6 and should work with later versions as well.
+
 ## Usage
 
 Once installed successfully in an environment that also has `flake8` installed, `pandas-vet` should run whenever `flake8` is run.
