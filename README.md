@@ -33,11 +33,21 @@ See the [`flake8` docs](http://flake8.pycqa.org/en/latest/user/invocation.html) 
 
 ## Contributing
 
-`pandas-vet` is still in the very early stages. Contributions are welcome from the community on codes, tests, docs, and just about anything else. 
+`pandas-vet` is still in the very early stages. Contributions are welcome from the community on code, tests, docs, and just about anything else.
 
-Please submit an issue (or draft PR) first describing the types of changes you'd like to implement.
+### Code of Conduct
 
-We use pytest and flake8 to validate our codebase. The TravisCI integration will complain on Pull Requests if there are any failing tests or lint violations. To check these locally, run the following commands:
+Because this project started during the PyCascades 2019 sprints, we adopt the PyCascades minimal expectation that we "Be excellent to each another". Beyond that, we follow the Python Software Foundation's [Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
+
+### Steps to contributing
+
+1. Please submit an issue (or draft PR) first describing the types of changes you'd like to implement.
+
+2. Fork the repo and create a new branch for your enhancement/fix.
+
+3. Write code, docs, etc.
+
+4. We use `pytest` and `flake8` to validate our codebase. The TravisCI integration will complain on pull requests if there are any failing tests or lint violations. To check these locally, run the following commands:
 
 ```bash
 pytest tests
@@ -47,9 +57,20 @@ pytest tests
 flake8 pandas_vet setup.py tests --exclude tests/data
 ```
 
-### Code of Conduct
+5. Push to your forked repo.
 
-Because this project started during the PyCascades 2019 sprints, we adopt the PyCascades minimal expectation that we "Be excellent to each another". Beyond that, we follow the Python Software Foundation's [Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
+6. Submit pull request to the parent repo from your branch. Be sure to write a clear message and reference the Issue # that relates to your pull request.
+
+7. Feel good about giving back to open source projects.
+
+### How to add a check to the linter
+
+1. Write tests. At a *minimum*, you should have test cases where the linter should catch "bad" `pandas` and test cases where the linter should allow "good" `pandas`.
+
+2. Write your check function in `/pandas-vet/__init__.py`.
+
+3. Run `flake8` and `pytest` on the linter itself (see [Steps to contributing](#steps-to-contributing))
+
 
 ## Contributors
 
