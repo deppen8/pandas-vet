@@ -55,9 +55,9 @@ Because this project started during the PyCascades 2019 sprints, we adopt the Py
 
 ### PyCascades 2019 sprints team
 
-Sam Beck
-[Jacob Deppen](https://twitter.com/jacob_deppen)
-Walt Javins
-Charles Simchick
-Aly Sivji
-Tim Smith
+- Sam Beck
+- [Jacob Deppen](https://twitter.com/jacob_deppen)
+- Walt Javins
+- Charles Simchick
+- Aly Sivji
+- Tim Smith
