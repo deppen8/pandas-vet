@@ -30,6 +30,16 @@ See the [`flake8` docs](http://flake8.pycqa.org/en/latest/user/invocation.html) 
 
 Please submit an issue (or draft PR) first describing the types of changes you'd like to implement.
 
+We use pytest and flake8 to validate our codebase. The TravisCI integration will complain on Pull Requests if there are any failing tests or lint violations. To check these locally, run the following commands:
+
+```bash
+pytest tests
+```
+
+```bash
+flake8 pandas_vet setup.py tests --exclude tests/data
+```
+
 ### Code of Conduct
 
 Because this project started during the PyCascades 2019 sprints, we adopt the PyCascades minimal expectation that we "Be excellent to each another". Beyond that, we follow the Python Software Foundation's [Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
