@@ -10,10 +10,17 @@ tests_requires = [
 
 flake8_entry_point = 'flake8.extension'
 
+with open("README.md", "rt") as f:
+    long_description = f.read()
+
+version = {}
+with open("pandas_vet/version.py") as fp:
+    exec(fp.read(), version)
+
 setuptools.setup(
     name="pandas-vet",
     license="MIT",
-    version="0.0.1",
+    version=version["__version__"],
     description="A flake8 plugin to lint pandas in an opinionated way",
     author="Jacob Deppen",
     author_email="deppen.8@gmail.com",
@@ -40,4 +47,6 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Software Development :: Quality Assurance",
     ],
+    long_description=long_description,
+    long_description_content_type="text/markdown",
 )
