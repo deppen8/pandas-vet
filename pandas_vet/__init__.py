@@ -27,6 +27,10 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_isnull(node))
         self.errors.extend(check_for_notnull(node))
 
+    def visit_Subscript(self, node):
+        self.generic_visit(node)  # continue checking children
+        self.errors.extend(check_for_ix(node))
+
     def check(self, node):
         self.errors = []
         self.visit(node)
@@ -74,6 +78,13 @@ def check_for_notnull(node: ast.Call) -> List:
     return errors
 
 
+def check_for_ix(node: ast.Subscript) -> List:
+    errors = []
+    if node.value.attr == "ix":
+        errors.append(PD007(node.lineno, node.col_offset))
+    return errors
+
+
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
 
@@ -94,4 +105,7 @@ PD005 = VetError(
 )
 PD006 = VetError(
     message="Use comparison operator instead of method"
+)
+PD007 = VetError(
+    message="'.ix' is deprecated; use more explicit '.loc' or '.iloc'"
 )
