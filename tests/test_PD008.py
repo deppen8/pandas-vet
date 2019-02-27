@@ -7,7 +7,7 @@ from pandas_vet import PD001, PD002, PD003, PD004, PD008
 
 def test_PD008_pass():
     """
-    Test that using .loc() explicitly does not result in an error.
+    Test that using .loc[] explicitly does not result in an error.
     """
     statement = "index = df.loc[:, ['B', 'A']]"
     tree = ast.parse(statement)
@@ -18,7 +18,7 @@ def test_PD008_pass():
 
 def test_PD008_fail():
     """
-    Test that using .at() results in an error.
+    Test that using .at[] results in an error.
     """
     statement = "index = df.at[:, ['B', 'A']]"
     tree = ast.parse(statement)

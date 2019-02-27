@@ -7,7 +7,7 @@ from pandas_vet import PD001, PD002, PD003, PD004, PD009
 
 def test_PD009_pass():
     """
-    Test that using .iloc() explicitly does not result in an error.
+    Test that using .iloc[] explicitly does not result in an error.
     """
     statement = "index = df.iloc[:, 1:3]"
     tree = ast.parse(statement)
@@ -18,7 +18,7 @@ def test_PD009_pass():
 
 def test_PD009_fail():
     """
-    Test that using .iat() results in an error.
+    Test that using .iat[] results in an error.
     """
     statement = "index = df.iat[:, 1:3]"
     tree = ast.parse(statement)
