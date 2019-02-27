@@ -26,6 +26,9 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_inplace_false(node))
         self.errors.extend(check_for_isnull(node))
         self.errors.extend(check_for_notnull(node))
+
+    def visit_Subscript(self, node):
+        self.generic_visit(node)  # continue checking children
         self.errors.extend(check_for_ix(node))
 
     def check(self, node):
@@ -75,9 +78,9 @@ def check_for_notnull(node: ast.Call) -> List:
     return errors
 
 
-def check_for_ix(node: ast.Call) -> List:
+def check_for_ix(node: ast.Subscript) -> List:
     errors = []
-    if node.func.attr == "ix":
+    if node.value.attr == "ix":
         errors.append(PD007(node.lineno, node.col_offset))
     return errors
 
