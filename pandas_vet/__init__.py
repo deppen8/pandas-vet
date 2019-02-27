@@ -26,6 +26,8 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_inplace_false(node))
         self.errors.extend(check_for_isnull(node))
         self.errors.extend(check_for_notnull(node))
+        self.errors.extend(check_for_at(node))
+        self.errors.extend(check_for_iat(node))
 
     def check(self, node):
         self.errors = []
@@ -74,6 +76,20 @@ def check_for_notnull(node: ast.Call) -> List:
     return errors
 
 
+def check_for_at(node: ast.Call) -> List:
+    errors = []
+    if node.func.attr == "at":
+        errors.append(PD008(node.lineno, node.col_offset))
+    return errors
+
+
+def check_for_iat(node: ast.Call) -> List:
+    errors = []
+    if node.func.attr == "iat":
+        errors.append(PD009(node.lineno, node.col_offset))
+    return errors
+
+
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
 
@@ -94,4 +110,10 @@ PD005 = VetError(
 )
 PD006 = VetError(
     message="Use comparison operator instead of method"
+)
+PD008 = VetError(
+    message="Use '.loc' instead of '.at'.  If speed is important, use numpy."
+)
+PD009 = VetError(
+    message="Use '.iloc' instead of '.iat'.  If speed is important, use numpy."
 )
