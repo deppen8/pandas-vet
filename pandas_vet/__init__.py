@@ -30,6 +30,8 @@ class Visitor(ast.NodeVisitor):
     def visit_Subscript(self, node):
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_for_ix(node))
+        self.errors.extend(check_for_at(node))
+        self.errors.extend(check_for_iat(node))
 
     def check(self, node):
         self.errors = []
@@ -84,6 +86,20 @@ def check_for_ix(node: ast.Subscript) -> List:
         errors.append(PD007(node.lineno, node.col_offset))
     return errors
 
+  
+def check_for_at(node: ast.Call) -> List:
+    errors = []
+    if node.value.attr == "at":
+        errors.append(PD008(node.lineno, node.col_offset))
+    return errors
+
+
+def check_for_iat(node: ast.Call) -> List:
+    errors = []
+    if node.value.attr == "iat":
+        errors.append(PD009(node.lineno, node.col_offset))
+    return errors
+
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
@@ -106,6 +122,14 @@ PD005 = VetError(
 PD006 = VetError(
     message="Use comparison operator instead of method"
 )
+
 PD007 = VetError(
     message="'.ix' is deprecated; use more explicit '.loc' or '.iloc'"
+)
+
+PD008 = VetError(
+    message="Use '.loc' instead of '.at'.  If speed is important, use numpy."
+)
+PD009 = VetError(
+    message="Use '.iloc' instead of '.iat'.  If speed is important, use numpy."
 )
