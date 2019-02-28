@@ -29,6 +29,12 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_pivot(node))
         self.errors.extend(check_for_unstack(node))
 
+    def visit_Subscript(self, node):
+        self.generic_visit(node)  # continue checking children
+        self.errors.extend(check_for_ix(node))
+        self.errors.extend(check_for_at(node))
+        self.errors.extend(check_for_iat(node))
+
     def check(self, node):
         self.errors = []
         self.visit(node)
@@ -76,6 +82,27 @@ def check_for_notnull(node: ast.Call) -> List:
     return errors
 
 
+def check_for_ix(node: ast.Subscript) -> List:
+    errors = []
+    if node.value.attr == "ix":
+        errors.append(PD007(node.lineno, node.col_offset))
+    return errors
+
+  
+def check_for_at(node: ast.Call) -> List:
+    errors = []
+    if node.value.attr == "at":
+        errors.append(PD008(node.lineno, node.col_offset))
+    return errors
+
+
+def check_for_iat(node: ast.Call) -> List:
+    errors = []
+    if node.value.attr == "iat":
+        errors.append(PD009(node.lineno, node.col_offset))
+    return errors
+
+  
 def check_for_pivot(node: ast.Call) -> List:
     """
     Check AST for occurence of the `.pivot()` method on the pandas data frame.
@@ -123,6 +150,16 @@ PD005 = VetError(
 PD006 = VetError(
     message="Use comparison operator instead of method"
 )
+PD007 = VetError(
+    message="'.ix' is deprecated; use more explicit '.loc' or '.iloc'"
+)
+PD008 = VetError(
+    message="Use '.loc' instead of '.at'.  If speed is important, use numpy."
+)
+PD009 = VetError(
+    message="Use '.iloc' instead of '.iat'.  If speed is important, use numpy."
+)
 PD010 = VetError(
     message="'.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
 )
+

@@ -39,6 +39,8 @@ $ flake8 ...
 
 See the [`flake8` docs](http://flake8.pycqa.org/en/latest/user/invocation.html) for more information.
 
+For a full list of implemented warnings, see [the list below](#list-of-warnings).
+
 ## Contributing
 
 `pandas-vet` is still in the very early stages. Contributions are welcome from the community on code, tests, docs, and just about anything else.
@@ -90,3 +92,23 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 - Charles Simchick
 - [Aly Sivji](https://twitter.com/CaiusSivjus)
 - Tim Smith
+
+## List of warnings
+
+**PD001:** pandas should always be imported as 'import pandas as pd'
+
+**PD002:** 'inplace = True' should be avoided; it has inconsistent behavior
+
+**PD003:** '.isna' is preferred to '.isnull'; functionality is equivalent
+
+**PD004:** '.notna' is preferred to '.notnull'; functionality is equivalent
+
+**PD005:** Use arithmetic operator instead of method
+
+**PD006:** Use comparison operator instead of method
+
+**PD007:** '.ix' is deprecated; use more explicit '.loc' or '.iloc'
+
+**PD008:** Use '.loc' instead of '.at'.  If speed is important, use numpy.
+
+**PD009:** Use '.iloc' instead of '.iat'.  If speed is important, use numpy.
