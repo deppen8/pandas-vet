@@ -28,6 +28,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_notnull(node))
         self.errors.extend(check_for_pivot(node))
         self.errors.extend(check_for_unstack(node))
+        self.errors.extend(check_for_read_table(node))
 
     def visit_Subscript(self, node):
         self.generic_visit(node)  # continue checking children
@@ -129,6 +130,18 @@ def check_for_unstack(node: ast.Call) -> List:
     return errors
 
 
+def check_for_read_table(node: ast.Call) -> List:
+    """
+    Check AST for occurence of the `.read_table()` method on the data frame.
+
+    Error/warning message to recommend use of `.read_csv()` method instead.
+    """
+    errors = []
+    if node.func.attr == "read_table":
+        errors.append(PD012(node.lineno, node.col_offset))
+    return errors
+
+
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
 
@@ -161,5 +174,8 @@ PD009 = VetError(
 )
 PD010 = VetError(
     message="'.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
+)
+PD012 = VetError(
+    message="'.read_csv' is preferred to '.read_table'; provides same functionality"
 )
 
