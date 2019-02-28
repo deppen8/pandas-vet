@@ -1,6 +1,6 @@
 """
-Test to check for use of the pandas dataframe soon-to-be-deprecated 
-`.read_table()` method. 
+Test to check for use of the pandas soon-to-be-deprecated `.read_table()`
+method. 
 """
 import ast
 

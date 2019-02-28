@@ -132,7 +132,7 @@ def check_for_unstack(node: ast.Call) -> List:
 
 def check_for_read_table(node: ast.Call) -> List:
     """
-    Check AST for occurence of the `.read_table()` method on the data frame.
+    Check AST for occurence of the `.read_table()` method on the pandas object.
 
     Error/warning message to recommend use of `.read_csv()` method instead.
     """
