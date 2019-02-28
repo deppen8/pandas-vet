@@ -26,6 +26,8 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_inplace_false(node))
         self.errors.extend(check_for_isnull(node))
         self.errors.extend(check_for_notnull(node))
+        self.errors.extend(check_for_pivot(node))
+        self.errors.extend(check_for_unstack(node))
 
     def visit_Subscript(self, node):
         self.generic_visit(node)  # continue checking children
@@ -100,6 +102,32 @@ def check_for_iat(node: ast.Call) -> List:
         errors.append(PD009(node.lineno, node.col_offset))
     return errors
 
+  
+def check_for_pivot(node: ast.Call) -> List:
+    """
+    Check AST for occurence of the `.pivot()` method on the pandas data frame.
+
+    Error/warning message to recommend use of `.pivot_table()` method instead.
+    This check should work for both the `df.pivot()` method, as well as the
+    `pd.pivot(df)` function.  
+    """
+    errors = []
+    if node.func.attr == "pivot":
+        errors.append(PD010(node.lineno, node.col_offset))
+    return errors
+
+
+def check_for_unstack(node: ast.Call) -> List:
+    """
+    Check AST for occurence of the `.unstack()` method on the pandas data frame.
+
+    Error/warning message to recommend use of `.pivot_table()` method instead.
+    """
+    errors = []
+    if node.func.attr == "unstack":
+        errors.append(PD010(node.lineno, node.col_offset))
+    return errors
+
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
@@ -122,14 +150,16 @@ PD005 = VetError(
 PD006 = VetError(
     message="Use comparison operator instead of method"
 )
-
 PD007 = VetError(
     message="'.ix' is deprecated; use more explicit '.loc' or '.iloc'"
 )
-
 PD008 = VetError(
     message="Use '.loc' instead of '.at'.  If speed is important, use numpy."
 )
 PD009 = VetError(
     message="Use '.iloc' instead of '.iat'.  If speed is important, use numpy."
 )
+PD010 = VetError(
+    message="'.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
+)
+
