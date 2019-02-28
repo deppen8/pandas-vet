@@ -34,6 +34,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_ix(node))
         self.errors.extend(check_for_at(node))
         self.errors.extend(check_for_iat(node))
+        self.errors.extend(check_for_values(node))
 
     def check(self, node):
         self.errors = []
@@ -129,6 +130,19 @@ def check_for_unstack(node: ast.Call) -> List:
     return errors
 
 
+def check_for_values(node: ast.Call) -> List:
+    """
+    Check AST for occurence of the `.values` attribute on the pandas data frame.
+
+    Error/warning message to recommend use of `.array` data frame attribute for
+    PandasArray, or `.to_array()` method for NumPy array.
+    """
+    errors = []
+    if node.value.attr == "values":
+        errors.append(PD011(node.lineno, node.col_offset))
+    return errors
+
+
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
 
@@ -161,5 +175,8 @@ PD009 = VetError(
 )
 PD010 = VetError(
     message="'.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
+)
+PD011 = VetError(
+    message="Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous"
 )
 
