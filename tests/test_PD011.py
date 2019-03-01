@@ -37,7 +37,7 @@ def test_PD011_fail_values():
     statement = "result = df.values"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
-    expected = []
+    expected = [PD011(1, 9)]
     assert actual == expected
 
 
