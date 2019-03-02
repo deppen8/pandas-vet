@@ -88,7 +88,7 @@ def check_for_ix(node: ast.Subscript) -> List:
         errors.append(PD007(node.lineno, node.col_offset))
     return errors
 
-  
+
 def check_for_at(node: ast.Call) -> List:
     errors = []
     if node.value.attr == "at":
@@ -102,14 +102,14 @@ def check_for_iat(node: ast.Call) -> List:
         errors.append(PD009(node.lineno, node.col_offset))
     return errors
 
-  
+
 def check_for_pivot(node: ast.Call) -> List:
     """
     Check AST for occurence of the `.pivot()` method on the pandas data frame.
 
     Error/warning message to recommend use of `.pivot_table()` method instead.
     This check should work for both the `df.pivot()` method, as well as the
-    `pd.pivot(df)` function.  
+    `pd.pivot(df)` function.
     """
     errors = []
     if node.func.attr == "pivot":
