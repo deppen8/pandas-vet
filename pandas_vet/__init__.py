@@ -77,14 +77,14 @@ def check_inplace_false(node: ast.Call) -> List:
 
 def check_for_isnull(node: ast.Call) -> List:
     errors = []
-    if node.func.attr == "isnull":
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "isnull":
         errors.append(PD003(node.lineno, node.col_offset))
     return errors
 
 
 def check_for_notnull(node: ast.Call) -> List:
     errors = []
-    if node.func.attr == "notnull":
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "notnull":
         errors.append(PD004(node.lineno, node.col_offset))
     return errors
 
@@ -119,7 +119,7 @@ def check_for_pivot(node: ast.Call) -> List:
     `pd.pivot(df)` function.
     """
     errors = []
-    if node.func.attr == "pivot":
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "pivot":
         errors.append(PD010(node.lineno, node.col_offset))
     return errors
 
@@ -131,7 +131,7 @@ def check_for_unstack(node: ast.Call) -> List:
     Error/warning message to recommend use of `.pivot_table()` method instead.
     """
     errors = []
-    if node.func.attr == "unstack":
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "unstack":
         errors.append(PD010(node.lineno, node.col_offset))
     return errors
 
