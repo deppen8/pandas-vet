@@ -41,6 +41,10 @@ class Visitor(ast.NodeVisitor):
         return self.errors
 
 
+class PandasVetException(Exception):
+    pass
+
+
 class VetPlugin:
     name = "flake8-pandas-vet"
     version = __version__
@@ -49,7 +53,10 @@ class VetPlugin:
         self.tree = tree
 
     def run(self):
-        return Visitor().check(self.tree)
+        try:
+            return Visitor().check(self.tree)
+        except Exception as e:
+            raise PandasVetException(e)
 
 
 def check_import_name(node: ast.Import) -> List:
@@ -69,38 +76,32 @@ def check_inplace_false(node: ast.Call) -> List:
 
 
 def check_for_isnull(node: ast.Call) -> List:
-    errors = []
-    if node.func.attr == "isnull":
-        errors.append(PD003(node.lineno, node.col_offset))
-    return errors
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "isnull":
+        return [PD003(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_notnull(node: ast.Call) -> List:
-    errors = []
-    if node.func.attr == "notnull":
-        errors.append(PD004(node.lineno, node.col_offset))
-    return errors
-
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "notnull":
+        return [PD004(node.lineno, node.col_offset)]
+    return []
 
 def check_for_ix(node: ast.Subscript) -> List:
-    errors = []
     if node.value.attr == "ix":
-        errors.append(PD007(node.lineno, node.col_offset))
-    return errors
+        return [PD007(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_at(node: ast.Call) -> List:
-    errors = []
     if node.value.attr == "at":
-        errors.append(PD008(node.lineno, node.col_offset))
-    return errors
+        return [PD008(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_iat(node: ast.Call) -> List:
-    errors = []
     if node.value.attr == "iat":
-        errors.append(PD009(node.lineno, node.col_offset))
-    return errors
+        return [PD009(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_pivot(node: ast.Call) -> List:
@@ -111,10 +112,9 @@ def check_for_pivot(node: ast.Call) -> List:
     This check should work for both the `df.pivot()` method, as well as the
     `pd.pivot(df)` function.
     """
-    errors = []
-    if node.func.attr == "pivot":
-        errors.append(PD010(node.lineno, node.col_offset))
-    return errors
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "pivot":
+        return [PD010(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_unstack(node: ast.Call) -> List:
@@ -123,10 +123,9 @@ def check_for_unstack(node: ast.Call) -> List:
 
     Error/warning message to recommend use of `.pivot_table()` method instead.
     """
-    errors = []
-    if node.func.attr == "unstack":
-        errors.append(PD010(node.lineno, node.col_offset))
-    return errors
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "unstack":
+        return [PD010(node.lineno, node.col_offset)]
+    return []
 
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
