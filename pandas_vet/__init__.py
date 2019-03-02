@@ -41,6 +41,10 @@ class Visitor(ast.NodeVisitor):
         return self.errors
 
 
+class PandasVetException(Exception):
+    pass
+
+
 class VetPlugin:
     name = "flake8-pandas-vet"
     version = __version__
@@ -49,7 +53,10 @@ class VetPlugin:
         self.tree = tree
 
     def run(self):
-        return Visitor().check(self.tree)
+        try:
+            return Visitor().check(self.tree)
+        except Exception as e:
+            raise PandasVetException(e)
 
 
 def check_import_name(node: ast.Import) -> List:
