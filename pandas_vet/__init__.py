@@ -18,10 +18,22 @@ class Visitor(ast.NodeVisitor):
     errors = attr.ib(default=attr.Factory(list))
 
     def visit_Import(self, node):
+        """ 
+        Called for `import ..` and `import .. as ..` nodes.
+        """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_import_name(node))
 
+    def visit_ImportFrom(self, node):
+        """ 
+        Called for `from .. import ..` nodes.
+        """
+        self.generic_visit(node)  # continue checking children
+
     def visit_Call(self, node):
+        """ 
+        Called for `.method()` nodes.
+        """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_inplace_false(node))
         self.errors.extend(check_for_isnull(node))
@@ -30,10 +42,18 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_unstack(node))
 
     def visit_Subscript(self, node):
+        """ 
+        Called for `[slicing]` nodes.
+        """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_for_ix(node))
         self.errors.extend(check_for_at(node))
         self.errors.extend(check_for_iat(node))
+
+    def visit_Attribute(self, node):
+        """ 
+        Called for `.attribute` nodes.
+        """
         self.errors.extend(check_for_values(node))
 
     def check(self, node):
@@ -138,7 +158,7 @@ def check_for_values(node: ast.Call) -> List:
     PandasArray, or `.to_array()` method for NumPy array.
     """
     errors = []
-    if node.value.attr == "values":
+    if node.attr == "values":
         errors.append(PD011(node.lineno, node.col_offset))
     return errors
 

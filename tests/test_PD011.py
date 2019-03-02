@@ -8,22 +8,22 @@ from pandas_vet import VetPlugin
 from pandas_vet import PD011
 
 
-def test_PD011_pass_array():
+def test_PD011_pass_to_array():
     """
-    Test that using .array explicitly does not result in an error.
+    Test that using .to_array() explicitly does not result in an error.
     """
-    statement = "result = df.array"
+    statement = "result = df.to_array()"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = []
     assert actual == expected
 
 
-def test_PD011_pass_to_array():
+def test_PD011_pass_array():
     """
-    Test that using .to_array() explicitly does not result in an error.
+    Test that using .array explicitly does not result in an error.
     """
-    statement = "result = df.to_array()"
+    statement = "result = df.array"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = []
