@@ -39,5 +39,3 @@ def test_PD010_fail_unstack():
     actual = list(VetPlugin(tree).run())
     expected = [PD010(1, 8)]
     assert actual == expected
-
-
