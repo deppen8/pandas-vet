@@ -27,3 +27,8 @@ def test_PD003_fail():
     assert actual == expected
 
 
+def test_allows_other_function_calls():
+    statement = "print('bah humbug')"
+    tree = ast.parse(statement)
+    result = VetPlugin(tree).run()
+    assert result == []
