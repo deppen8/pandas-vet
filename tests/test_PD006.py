@@ -15,7 +15,7 @@ def test_PD006_pass_comparison_operator():
     """
     comparison_operators = ['>',  '<',  '>=', '<=', '==', '!=']
     for op in comparison_operators:
-        statement = f'C = A {op} B'
+        statement = 'C = A {0} B'.format(op)
         tree = ast.parse(statement)
         actual = list(VetPlugin(tree).run())
         expected = []
@@ -28,7 +28,7 @@ def test_PD006_fail_comparison_method():
     """
     comparison_methods = ['gt', 'lt', 'ge', 'le', 'eq', 'ne']
     for op in comparison_methods:
-        statement = f'C = A.{op}(B)'
+        statement = 'C = A.{0}(B)'.format(op)
         tree = ast.parse(statement)
         actual = list(VetPlugin(tree).run())
         expected = [PD006(1, 4)]
