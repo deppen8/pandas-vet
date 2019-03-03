@@ -11,7 +11,7 @@ from pandas_vet import PD005
 
 def test_PD005_pass_arithmetic_operator():
     """
-    Test that using binary aritmetic operator explicitly does not result in an error.
+    Test that using binary arithmetic operator explicitly does not result in an error.
     """
     arithmetic_operators = [
         '+',
@@ -23,7 +23,7 @@ def test_PD005_pass_arithmetic_operator():
         '%',
         ]
     for op in arithmetic_operators:
-        statement = f'C = A {op} B'
+        statement = 'C = A {0} B'.format(op)
         tree = ast.parse(statement)
         actual = list(VetPlugin(tree).run())
         expected = []
@@ -32,7 +32,7 @@ def test_PD005_pass_arithmetic_operator():
 
 def test_PD005_fail_arithmetic_method():
     """
-    Test that using aritmetic method results in an error.
+    Test that using arithmetic method results in an error.
     """
     arithmetic_methods = [
         'add',
@@ -44,7 +44,7 @@ def test_PD005_fail_arithmetic_method():
         'mod',
         ]
     for op in arithmetic_methods:
-        statement = f'C = A.{op}(B)'
+        statement = 'C = A.{0}(B)'.format(op)
         tree = ast.parse(statement)
         actual = list(VetPlugin(tree).run())
         expected = [PD005(1, 4)]
