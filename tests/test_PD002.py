@@ -25,5 +25,3 @@ def test_PD002_fail():
     actual = list(VetPlugin(tree).run())
     expected = [PD002(1, 0)]
     assert actual == expected
-
-

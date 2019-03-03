@@ -36,5 +36,3 @@ def test_PD001_fail_wrong_alias():
     actual = list(VetPlugin(tree).run())
     expected = [PD001(1, 0)]
     assert actual == expected
-
-
