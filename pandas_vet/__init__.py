@@ -88,32 +88,20 @@ def check_for_notnull(node: ast.Call) -> List:
 
 
 def check_for_ix(node: ast.Subscript) -> List:
-    if isinstance(node.value, ast.Name):
-        if node.value.id == "ix":
-            return [PD007(node.lineno, node.col_offset)]
-    elif isinstance(node.value, ast.Attribute):
-        if node.value.attr == 'ix':
-            return [PD007(node.lineno, node.col_offset)]
+    if isinstance(node.value, ast.Attribute) and node.value.attr == 'ix':
+        return [PD007(node.lineno, node.col_offset)]
     return []
 
 
 def check_for_at(node: ast.Subscript) -> List:
-    if isinstance(node.value, ast.Name):
-        if node.value.id == "at":
-            return [PD008(node.lineno, node.col_offset)]
-    elif isinstance(node.value, ast.Attribute):
-        if node.value.attr == 'at':
-            return [PD008(node.lineno, node.col_offset)]
+    if isinstance(node.value, ast.Attribute) and node.value.attr == 'at':
+        return [PD008(node.lineno, node.col_offset)]
     return []
 
 
 def check_for_iat(node: ast.Subscript) -> List:
-    if isinstance(node.value, ast.Name):
-        if node.value.id == "iat":
-            return [PD009(node.lineno, node.col_offset)]
-    elif isinstance(node.value, ast.Attribute):
-        if node.value.attr == 'iat':
-            return [PD009(node.lineno, node.col_offset)]
+    if isinstance(node.value, ast.Attribute) and node.value.attr == 'iat':
+        return [PD009(node.lineno, node.col_offset)]
     return []
 
 
