@@ -62,6 +62,10 @@ class Visitor(ast.NodeVisitor):
         return self.errors
 
 
+class PandasVetException(Exception):
+    pass
+
+
 class VetPlugin:
     name = "flake8-pandas-vet"
     version = __version__
@@ -70,7 +74,10 @@ class VetPlugin:
         self.tree = tree
 
     def run(self):
-        return Visitor().check(self.tree)
+        try:
+            return Visitor().check(self.tree)
+        except Exception as e:
+            raise PandasVetException(e)
 
 
 def check_import_name(node: ast.Import) -> List:
@@ -90,52 +97,45 @@ def check_inplace_false(node: ast.Call) -> List:
 
 
 def check_for_isnull(node: ast.Call) -> List:
-    errors = []
-    if node.func.attr == "isnull":
-        errors.append(PD003(node.lineno, node.col_offset))
-    return errors
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "isnull":
+        return [PD003(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_notnull(node: ast.Call) -> List:
-    errors = []
-    if node.func.attr == "notnull":
-        errors.append(PD004(node.lineno, node.col_offset))
-    return errors
-
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "notnull":
+        return [PD004(node.lineno, node.col_offset)]
+    return []
 
 def check_for_ix(node: ast.Subscript) -> List:
-    errors = []
     if node.value.attr == "ix":
-        errors.append(PD007(node.lineno, node.col_offset))
-    return errors
+        return [PD007(node.lineno, node.col_offset)]
+    return []
 
-  
+
 def check_for_at(node: ast.Call) -> List:
-    errors = []
     if node.value.attr == "at":
-        errors.append(PD008(node.lineno, node.col_offset))
-    return errors
+        return [PD008(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_iat(node: ast.Call) -> List:
-    errors = []
     if node.value.attr == "iat":
-        errors.append(PD009(node.lineno, node.col_offset))
-    return errors
+        return [PD009(node.lineno, node.col_offset)]
+    return []
 
-  
+
 def check_for_pivot(node: ast.Call) -> List:
     """
     Check AST for occurence of the `.pivot()` method on the pandas data frame.
 
     Error/warning message to recommend use of `.pivot_table()` method instead.
     This check should work for both the `df.pivot()` method, as well as the
-    `pd.pivot(df)` function.  
+    `pd.pivot(df)` function.
     """
-    errors = []
-    if node.func.attr == "pivot":
-        errors.append(PD010(node.lineno, node.col_offset))
-    return errors
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "pivot":
+        return [PD010(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_unstack(node: ast.Call) -> List:
@@ -144,10 +144,9 @@ def check_for_unstack(node: ast.Call) -> List:
 
     Error/warning message to recommend use of `.pivot_table()` method instead.
     """
-    errors = []
-    if node.func.attr == "unstack":
-        errors.append(PD010(node.lineno, node.col_offset))
-    return errors
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "unstack":
+        return [PD010(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_values(node: ast.Call) -> List:
@@ -170,33 +169,32 @@ PD001 = VetError(
     message="PD001 pandas should always be imported as 'import pandas as pd'"
 )
 PD002 = VetError(
-    message="'inplace = True' should be avoided; it has inconsistent behavior"
+    message="PD002 'inplace = True' should be avoided; it has inconsistent behavior"
 )
 PD003 = VetError(
-    message="'.isna' is preferred to '.isnull'; functionality is equivalent"
+    message="PD003 '.isna' is preferred to '.isnull'; functionality is equivalent"
 )
 PD004 = VetError(
-    message="'.notna' is preferred to '.notnull'; functionality is equivalent"
+    message="PD004 '.notna' is preferred to '.notnull'; functionality is equivalent"
 )
 PD005 = VetError(
-    message="Use arithmetic operator instead of method"
+    message="PD005 Use arithmetic operator instead of method"
 )
 PD006 = VetError(
-    message="Use comparison operator instead of method"
+    message="PD006 Use comparison operator instead of method"
 )
 PD007 = VetError(
-    message="'.ix' is deprecated; use more explicit '.loc' or '.iloc'"
+    message="PD007 '.ix' is deprecated; use more explicit '.loc' or '.iloc'"
 )
 PD008 = VetError(
-    message="Use '.loc' instead of '.at'.  If speed is important, use numpy."
+    message="PD008 Use '.loc' instead of '.at'.  If speed is important, use numpy."
 )
 PD009 = VetError(
-    message="Use '.iloc' instead of '.iat'.  If speed is important, use numpy."
+    message="PD009 Use '.iloc' instead of '.iat'.  If speed is important, use numpy."
 )
 PD010 = VetError(
-    message="'.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
+    message="PD010 '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
 )
 PD011 = VetError(
-    message="Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous"
+    message="PD011 Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous"
 )
-
