@@ -27,3 +27,12 @@ def test_PD008_fail():
     assert actual == expected
 
 
+def test_PD008_node_value_Name_pass():
+    """
+    Test that an ast.Subscript where node.value is a Name does NOT raise an error
+    """
+    statement = "s = at[[0, 2], 'A']"
+    tree = ast.parse(statement)
+    actual = list(VetPlugin(tree).run())
+    expected = []
+    assert actual == expected
