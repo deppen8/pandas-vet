@@ -175,5 +175,5 @@ PD010 = VetError(
     message="PD010 '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
 )
 PD012 = VetError(
-    message="'.read_csv' is preferred to '.read_table'; provides same functionality"
+    message="PDO12 '.read_csv' is preferred to '.read_table'; provides same functionality"
 )
