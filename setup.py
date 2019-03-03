@@ -2,6 +2,7 @@ import setuptools
 
 requires = [
     "flake8 > 3.0.0",
+    "attrs",
 ]
 
 tests_requires = [
