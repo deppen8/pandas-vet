@@ -1,5 +1,5 @@
 """
-Test to check for use of explicit arithmetic methods.  
+Test to check for use of explicit arithmetic methods.
 
 Recommend use of binary arithmetic operators instead.
 """

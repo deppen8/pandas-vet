@@ -1,5 +1,5 @@
 """
-Test to check for use of explicit comparison methods.  
+Test to check for use of explicit comparison methods.
 
 Recommend use of binary comparison operators instead.
 """
