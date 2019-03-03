@@ -187,30 +187,30 @@ PD001 = VetError(
     message="PD001 pandas should always be imported as 'import pandas as pd'"
 )
 PD002 = VetError(
-    message="'inplace = True' should be avoided; it has inconsistent behavior"
+    message="PD002 'inplace = True' should be avoided; it has inconsistent behavior"
 )
 PD003 = VetError(
-    message="'.isna' is preferred to '.isnull'; functionality is equivalent"
+    message="PD003 '.isna' is preferred to '.isnull'; functionality is equivalent"
 )
 PD004 = VetError(
-    message="'.notna' is preferred to '.notnull'; functionality is equivalent"
+    message="PD004 '.notna' is preferred to '.notnull'; functionality is equivalent"
 )
 PD005 = VetError(
-    message="Use arithmetic operator instead of method"
+    message="PD005 Use arithmetic operator instead of method"
 )
 PD006 = VetError(
-    message="Use comparison operator instead of method"
+    message="PD006 Use comparison operator instead of method"
 )
 PD007 = VetError(
-    message="'.ix' is deprecated; use more explicit '.loc' or '.iloc'"
+    message="PD007 '.ix' is deprecated; use more explicit '.loc' or '.iloc'"
 )
 PD008 = VetError(
-    message="Use '.loc' instead of '.at'.  If speed is important, use numpy."
+    message="PD008 Use '.loc' instead of '.at'.  If speed is important, use numpy."
 )
 PD009 = VetError(
-    message="Use '.iloc' instead of '.iat'.  If speed is important, use numpy."
+    message="PD009 Use '.iloc' instead of '.iat'.  If speed is important, use numpy."
 )
 PD010 = VetError(
-    message="'.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
+    message="PD010 '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
 )
 
