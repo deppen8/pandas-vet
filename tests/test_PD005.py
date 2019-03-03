@@ -49,5 +49,3 @@ def test_PD005_fail_arithmetic_method():
         actual = list(VetPlugin(tree).run())
         expected = [PD005(1, 4)]
         assert actual == expected
-
-
