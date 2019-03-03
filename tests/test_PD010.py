@@ -1,6 +1,6 @@
 """
 Test to check functionality for use of the `.pivot_table()` data frame
-method in preference to either `.pivot()` or `.unstack()` methods.  
+method in preference to either `.pivot()` or `.unstack()` methods.
 """
 import ast
 
@@ -39,5 +39,3 @@ def test_PD010_fail_unstack():
     actual = list(VetPlugin(tree).run())
     expected = [PD010(1, 8)]
     assert actual == expected
-
-
