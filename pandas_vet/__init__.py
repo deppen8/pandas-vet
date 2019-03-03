@@ -88,19 +88,19 @@ def check_for_notnull(node: ast.Call) -> List:
     return []
 
 def check_for_ix(node: ast.Subscript) -> List:
-    if node.value.attr == "ix":
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "ix":
         return [PD007(node.lineno, node.col_offset)]
     return []
 
 
-def check_for_at(node: ast.Call) -> List:
-    if node.value.attr == "at":
+def check_for_at(node: ast.Subscript) -> List:
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "at":
         return [PD008(node.lineno, node.col_offset)]
     return []
 
 
-def check_for_iat(node: ast.Call) -> List:
-    if node.value.attr == "iat":
+def check_for_iat(node: ast.Subscript) -> List:
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "iat":
         return [PD009(node.lineno, node.col_offset)]
     return []
 
@@ -136,7 +136,7 @@ def check_for_read_table(node: ast.Call) -> List:
     Error/warning message to recommend use of `.read_csv()` method instead.
     """
     errors = []
-    if node.func.attr == "read_table":
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
         errors.append(PD012(node.lineno, node.col_offset))
     return errors
 
