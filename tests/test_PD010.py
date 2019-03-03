@@ -1,6 +1,6 @@
 """
 Test to check functionality for use of the `.pivot_table()` data frame
-method in preference to either `.pivot()` or `.unstack()` methods.  
+method in preference to either `.pivot()` or `.unstack()` methods.
 """
 import ast
 
