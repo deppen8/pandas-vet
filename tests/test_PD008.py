@@ -2,7 +2,7 @@
 import ast
 
 from pandas_vet import VetPlugin
-from pandas_vet import PD001, PD002, PD003, PD004, PD008
+from pandas_vet import PD008
 
 
 def test_PD008_pass():
@@ -26,7 +26,7 @@ def test_PD008_fail():
     expected = [PD008(1, 8)]
     assert actual == expected
 
-
+    
 def test_PD008_node_value_Name_pass():
     """
     Test that an ast.Subscript where node.value is a Name does NOT raise an error

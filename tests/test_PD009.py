@@ -2,7 +2,7 @@
 import ast
 
 from pandas_vet import VetPlugin
-from pandas_vet import PD001, PD002, PD003, PD004, PD009
+from pandas_vet import PD009
 
 
 def test_PD009_pass():
