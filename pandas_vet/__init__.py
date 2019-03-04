@@ -24,12 +24,6 @@ class Visitor(ast.NodeVisitor):
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_import_name(node))
 
-    def visit_ImportFrom(self, node):
-        """ 
-        Called for `from .. import ..` nodes.
-        """
-        self.generic_visit(node)  # continue checking children
-
     def visit_Call(self, node):
         """ 
         Called for `.method()` nodes.
@@ -149,17 +143,16 @@ def check_for_unstack(node: ast.Call) -> List:
     return []
 
 
-def check_for_values(node: ast.Call) -> List:
+def check_for_values(node: ast.Attribute) -> List:
     """
     Check AST for occurence of the `.values` attribute on the pandas data frame.
 
     Error/warning message to recommend use of `.array` data frame attribute for
     PandasArray, or `.to_array()` method for NumPy array.
     """
-    errors = []
     if node.attr == "values":
-        errors.append(PD011(node.lineno, node.col_offset))
-    return errors
+        return [PD011(node.lineno, node.col_offset)]
+    return []
 
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
