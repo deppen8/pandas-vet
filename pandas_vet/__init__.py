@@ -31,9 +31,9 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_notnull(node))
         self.errors.extend(check_for_pivot(node))
         self.errors.extend(check_for_unstack(node))
-        self.errors.extend(check_for_read_table(node))
         self.errors.extend(check_for_arithmetic_methods(node))
         self.errors.extend(check_for_comparison_methods(node))
+        self.errors.extend(check_for_read_table(node))
 
     def visit_Subscript(self, node):
         self.generic_visit(node)  # continue checking children
