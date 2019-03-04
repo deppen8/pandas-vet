@@ -30,3 +30,12 @@ def test_PD012_fail_read_table():
     assert actual == expected
 
 
+def test_PD012_node_Name_pass():
+    """
+    Test that where 'read_table' is a Name does NOT raise an error
+    """
+    statement = "df = read_table"
+    tree = ast.parse(statement)
+    actual = list(VetPlugin(tree).run())
+    expected = []
+    assert actual == expected
