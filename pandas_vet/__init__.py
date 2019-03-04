@@ -133,7 +133,9 @@ def check_for_comparison_methods(node: ast.Call) -> List:
     comparison_methods = ['gt', 'lt', 'ge', 'le', 'eq', 'ne']
     comparison_operators = ['>',  '<',  '>=', '<=', '==', '!=']
 
-    errors = []
+    if isinstance(node.func, ast.Attribute) and node.func.attr in comparison_methods:
+        return [PD006(node.lineno, node.col_offset)]
+    return []
     if isinstance(node.func, ast.Attribute) and node.func.attr in comparison_methods:
         errors.append(PD006(node.lineno, node.col_offset))
     return errors
