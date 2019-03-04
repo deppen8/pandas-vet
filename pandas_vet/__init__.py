@@ -118,6 +118,8 @@ def check_for_arithmetic_methods(node: ast.Call) -> List:
 
     errors = []
     if isinstance(node.func, ast.Attribute) and node.func.attr in arithmetic_methods:
+        return [PD005(node.lineno, node.col_offset)]
+    return []
         errors.append(PD005(node.lineno, node.col_offset))
     return errors
 
