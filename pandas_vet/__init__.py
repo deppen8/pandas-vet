@@ -33,6 +33,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_unstack(node))
         self.errors.extend(check_for_arithmetic_methods(node))
         self.errors.extend(check_for_comparison_methods(node))
+        self.errors.extend(check_for_read_table(node))
 
     def visit_Subscript(self, node):
         self.generic_visit(node)  # continue checking children
@@ -136,19 +137,19 @@ def check_for_comparison_methods(node: ast.Call) -> List:
 
 
 def check_for_ix(node: ast.Subscript) -> List:
-    if node.value.attr == "ix":
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "ix":
         return [PD007(node.lineno, node.col_offset)]
     return []
 
 
-def check_for_at(node: ast.Call) -> List:
-    if node.value.attr == "at":
+def check_for_at(node: ast.Subscript) -> List:
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "at":
         return [PD008(node.lineno, node.col_offset)]
     return []
 
 
-def check_for_iat(node: ast.Call) -> List:
-    if node.value.attr == "iat":
+def check_for_iat(node: ast.Subscript) -> List:
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "iat":
         return [PD009(node.lineno, node.col_offset)]
     return []
 
@@ -174,6 +175,17 @@ def check_for_unstack(node: ast.Call) -> List:
     """
     if isinstance(node.func, ast.Attribute) and node.func.attr == "unstack":
         return [PD010(node.lineno, node.col_offset)]
+    return []
+
+
+def check_for_read_table(node: ast.Call) -> List:
+    """
+    Check AST for occurence of the `.read_table()` method on the pandas object.
+
+    Error/warning message to recommend use of `.read_csv()` method instead.
+    """
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
+        return [PD012(node.lineno, node.col_offset)]
     return []
 
 
@@ -209,4 +221,7 @@ PD009 = VetError(
 )
 PD010 = VetError(
     message="PD010 '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
+)
+PD012 = VetError(
+    message="PDO12 '.read_csv' is preferred to '.read_table'; provides same functionality"
 )
