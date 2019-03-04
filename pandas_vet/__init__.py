@@ -138,9 +138,6 @@ def check_for_read_table(node: ast.Call) -> List:
     if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
         return [PD012(node.lineno, node.col_offset)]
     return []
-    if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
-        errors.append(PD012(node.lineno, node.col_offset))
-    return errors
 
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
