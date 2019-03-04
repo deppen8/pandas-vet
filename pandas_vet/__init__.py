@@ -135,7 +135,9 @@ def check_for_read_table(node: ast.Call) -> List:
 
     Error/warning message to recommend use of `.read_csv()` method instead.
     """
-    errors = []
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
+        return [PD012(node.lineno, node.col_offset)]
+    return []
     if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
         errors.append(PD012(node.lineno, node.col_offset))
     return errors
