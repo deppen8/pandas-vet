@@ -118,8 +118,8 @@ def check_for_arithmetic_methods(node: ast.Call) -> List:
 
     errors = []
     if isinstance(node.func, ast.Attribute) and node.func.attr in arithmetic_methods:
-        errors.append(PD005(node.lineno, node.col_offset))
-    return errors
+        return [PD005(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_comparison_methods(node: ast.Call) -> List:
@@ -133,8 +133,8 @@ def check_for_comparison_methods(node: ast.Call) -> List:
 
     errors = []
     if isinstance(node.func, ast.Attribute) and node.func.attr in comparison_methods:
-        errors.append(PD006(node.lineno, node.col_offset))
-    return errors
+        return [PD006(node.lineno, node.col_offset)]
+    return []
 
 
 def check_for_ix(node: ast.Subscript) -> List:
