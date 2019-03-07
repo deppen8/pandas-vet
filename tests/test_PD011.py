@@ -40,4 +40,12 @@ def test_PD011_fail_values():
     expected = [PD011(1, 9)]
     assert actual == expected
 
-
+def test_PD011_pass_node_Name():
+    """
+    Test that where 'values' is a Name does NOT raise an error
+    """
+    statement = "result = values"
+    tree = ast.parse(statement)
+    actual = list(VetPlugin(tree).run())
+    expected = []
+    assert actual == expected
