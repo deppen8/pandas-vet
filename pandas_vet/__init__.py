@@ -14,6 +14,9 @@ class Visitor(ast.NodeVisitor):
     ast.NodeVisitor will automatically call the appropriate method for a given node type
 
     i.e. calling self.visit on an Import node calls visit_import
+
+    The `check` functions should be called from the `visit_` method that
+    would produce a 'fail' condition.  
     """
     errors = attr.ib(default=attr.Factory(list))
 
@@ -34,6 +37,9 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_notnull(node))
         self.errors.extend(check_for_pivot(node))
         self.errors.extend(check_for_unstack(node))
+        self.errors.extend(check_for_arithmetic_methods(node))
+        self.errors.extend(check_for_comparison_methods(node))
+        self.errors.extend(check_for_read_table(node))
 
     def visit_Subscript(self, node):
         """ 
@@ -101,20 +107,64 @@ def check_for_notnull(node: ast.Call) -> List:
         return [PD004(node.lineno, node.col_offset)]
     return []
 
+def check_for_arithmetic_methods(node: ast.Call) -> List:
+    """
+    Check AST for occurence of explicit arithmetic methods.  
+
+    Error/warning message to recommend use of binary arithmetic operators instead.
+    """
+    arithmetic_methods = [
+        'add',
+        'sub', 'subtract',
+        'mul', 'multiply',
+        'div', 'divide', 'truediv',
+        'pow',
+        'floordiv',
+        'mod',
+        ]
+    arithmetic_operators = [
+        '+',
+        '-',
+        '*',
+        '/',
+        '**',
+        '//',
+        '%',
+        ]
+
+    if isinstance(node.func, ast.Attribute) and node.func.attr in arithmetic_methods:
+        return [PD005(node.lineno, node.col_offset)]
+    return []
+
+
+def check_for_comparison_methods(node: ast.Call) -> List:
+    """
+    Check AST for occurence of explicit comparison methods.  
+
+    Error/warning message to recommend use of binary comparison operators instead.
+    """
+    comparison_methods = ['gt', 'lt', 'ge', 'le', 'eq', 'ne']
+    comparison_operators = ['>',  '<',  '>=', '<=', '==', '!=']
+
+    if isinstance(node.func, ast.Attribute) and node.func.attr in comparison_methods:
+        return [PD006(node.lineno, node.col_offset)]
+    return []
+
+
 def check_for_ix(node: ast.Subscript) -> List:
-    if node.value.attr == "ix":
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "ix":
         return [PD007(node.lineno, node.col_offset)]
     return []
 
 
-def check_for_at(node: ast.Call) -> List:
-    if node.value.attr == "at":
+def check_for_at(node: ast.Subscript) -> List:
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "at":
         return [PD008(node.lineno, node.col_offset)]
     return []
 
 
-def check_for_iat(node: ast.Call) -> List:
-    if node.value.attr == "iat":
+def check_for_iat(node: ast.Subscript) -> List:
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "iat":
         return [PD009(node.lineno, node.col_offset)]
     return []
 
@@ -154,6 +204,17 @@ def check_for_values(node: ast.Attribute) -> List:
         return [PD011(node.lineno, node.col_offset)]
     return []
 
+  
+def check_for_read_table(node: ast.Call) -> List:
+    """
+    Check AST for occurence of the `.read_table()` method on the pandas object.
+
+    Error/warning message to recommend use of `.read_csv()` method instead.
+    """
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
+        return [PD012(node.lineno, node.col_offset)]
+    return []
+
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
@@ -190,4 +251,7 @@ PD010 = VetError(
 )
 PD011 = VetError(
     message="PD011 Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous"
+)
+PD012 = VetError(
+    message="PDO12 '.read_csv' is preferred to '.read_table'; provides same functionality"
 )
