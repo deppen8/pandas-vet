@@ -21,10 +21,16 @@ class Visitor(ast.NodeVisitor):
     errors = attr.ib(default=attr.Factory(list))
 
     def visit_Import(self, node):
+        """ 
+        Called for `import ..` and `import .. as ..` nodes.
+        """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_import_name(node))
 
     def visit_Call(self, node):
+        """ 
+        Called for `.method()` nodes.
+        """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_inplace_false(node))
         self.errors.extend(check_for_isnull(node))
@@ -36,10 +42,19 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_read_table(node))
 
     def visit_Subscript(self, node):
+        """ 
+        Called for `[slicing]` nodes.
+        """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_for_ix(node))
         self.errors.extend(check_for_at(node))
         self.errors.extend(check_for_iat(node))
+
+    def visit_Attribute(self, node):
+        """ 
+        Called for `.attribute` nodes.
+        """
+        self.errors.extend(check_for_values(node))
 
     def check(self, node):
         self.errors = []
@@ -178,6 +193,18 @@ def check_for_unstack(node: ast.Call) -> List:
     return []
 
 
+def check_for_values(node: ast.Attribute) -> List:
+    """
+    Check AST for occurence of the `.values` attribute on the pandas data frame.
+
+    Error/warning message to recommend use of `.array` data frame attribute for
+    PandasArray, or `.to_array()` method for NumPy array.
+    """
+    if node.attr == "values":
+        return [PD011(node.lineno, node.col_offset)]
+    return []
+
+  
 def check_for_read_table(node: ast.Call) -> List:
     """
     Check AST for occurence of the `.read_table()` method on the pandas object.
@@ -221,6 +248,9 @@ PD009 = VetError(
 )
 PD010 = VetError(
     message="PD010 '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
+)
+PD011 = VetError(
+    message="PD011 Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous"
 )
 PD012 = VetError(
     message="PDO12 '.read_csv' is preferred to '.read_table'; provides same functionality"
