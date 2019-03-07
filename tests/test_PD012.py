@@ -1,6 +1,6 @@
 """
 Test to check for use of the pandas soon-to-be-deprecated `.read_table()`
-method. 
+method.
 """
 import ast
 

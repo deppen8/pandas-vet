@@ -11,7 +11,8 @@ from pandas_vet import PD005
 
 def test_PD005_pass_arithmetic_operator():
     """
-    Test that using binary arithmetic operator explicitly does not result in an error.
+    Test that explicit use of binary arithmetic operator does not
+    result in an error.
     """
     arithmetic_operators = [
         '+',
