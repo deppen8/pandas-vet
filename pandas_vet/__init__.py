@@ -49,6 +49,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_ix(node))
         self.errors.extend(check_for_at(node))
         self.errors.extend(check_for_iat(node))
+        self.errors.extend(check_for_groupby_slicing(node))
 
     def visit_Attribute(self, node):
         """ 
@@ -216,6 +217,27 @@ def check_for_read_table(node: ast.Call) -> List:
     return []
 
 
+def check_for_groupby_slicing(node: ast.Call) -> List:
+    """
+    Check for slicing operations when using of the `.groupby()` method.
+
+    This function will only be called when visiting a `ast.Subscript` node, 
+    which indicates use of slicing syntax.  
+
+    Error/warning message to recommend use of the standard pattern below, 
+    which can handle more generalized cases and returns consistent dataframe.
+    
+        .groupby('group_cols').agg({'agg_cols': 'agg_funcs'})
+
+    """
+    if isinstance(node.value, ast.Call):
+        fxn_node = node.value.func
+        if (isinstance(fxn_node, ast.Name) and fxn_node.id == 'groupby') or \
+           (isinstance(fxn_node, ast.Attribute) and fxn_node.attr == 'groupby'):
+            return [PD014(node.lineno, node.col_offset)]
+    return []
+
+
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
 
@@ -254,4 +276,7 @@ PD011 = VetError(
 )
 PD012 = VetError(
     message="PDO12 '.read_csv' is preferred to '.read_table'; provides same functionality"
+)
+PD014 = VetError(
+    message="PDO14 Use standard syntax '.groupby().agg({agg_col: agg_func})' instead of slicing"
 )
