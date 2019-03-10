@@ -37,6 +37,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_notnull(node))
         self.errors.extend(check_for_pivot(node))
         self.errors.extend(check_for_unstack(node))
+        self.errors.extend(check_for_stack(node))
         self.errors.extend(check_for_arithmetic_methods(node))
         self.errors.extend(check_for_comparison_methods(node))
         self.errors.extend(check_for_read_table(node))
@@ -193,6 +194,17 @@ def check_for_unstack(node: ast.Call) -> List:
     return []
 
 
+def check_for_stack(node: ast.Call) -> List:
+    """
+    Check AST for occurence of the `.stack()` method on the pandas data frame.
+
+    Error/warning message to recommend use of `.melt()` method instead.
+    """
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "stack":
+        return [PD013(node.lineno, node.col_offset)]
+    return []
+
+
 def check_for_values(node: ast.Attribute) -> List:
     """
     Check AST for occurence of the `.values` attribute on the pandas data frame.
@@ -254,4 +266,7 @@ PD011 = VetError(
 )
 PD012 = VetError(
     message="PDO12 '.read_csv' is preferred to '.read_table'; provides same functionality"
+)
+PD013 = VetError(
+    message="PD013 '.melt' is preferred to '.stack'; provides same functionality"
 )

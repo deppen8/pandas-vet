@@ -11,7 +11,8 @@ from pandas_vet import PD006
 
 def test_PD006_pass_comparison_operator():
     """
-    Test that using binary comparison operator explicitly does not result in an error.
+    Test that explicit use of binary comparison operator does not
+    result in an error.
     """
     comparison_operators = ['>',  '<',  '>=', '<=', '==', '!=']
     for op in comparison_operators:
