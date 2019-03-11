@@ -1,6 +1,6 @@
 """
-Test to check for use of the pandas dataframe `.array` attribute 
-or `.to_array()` method in preference to `.values` attribute.  
+Test to check for use of the pandas dataframe `.array` attribute
+or `.to_array()` method in preference to `.values` attribute.
 """
 import ast
 
@@ -39,6 +39,7 @@ def test_PD011_fail_values():
     actual = list(VetPlugin(tree).run())
     expected = [PD011(1, 9)]
     assert actual == expected
+
 
 def test_PD011_pass_node_Name():
     """

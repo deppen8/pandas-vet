@@ -59,7 +59,7 @@ def test_PD014_pass_groupby_method_with_no_slicing():
 
 def test_pd014_pass_groupby_method_with_no_slicing_with_agg_method():
     """
-    test that using .groupby().agg() without slicing does not result in an error.
+    test that .groupby().agg() without slicing does not result in an error.
     """
     statement = "df.groupby('group_col').agg('agg_func')"
     tree = ast.parse(statement)
@@ -70,7 +70,7 @@ def test_pd014_pass_groupby_method_with_no_slicing_with_agg_method():
 
 def test_PD014_pass_groupby_method_with_no_slicing_with_agg_columns():
     """
-    Test that using .groupby().agg() without slicing does not result in an error.
+    Test that .groupby().agg() without slicing does not result in an error.
     """
     statement = "df.groupby('group_col').agg({'agg_col': 'agg_func'})"
     tree = ast.parse(statement)
@@ -112,8 +112,8 @@ def test_PD014_fail_groupby_method_with_slicing_and_agg_func():
     assert actual == expected
 
 
-## Below functions test for use of `groupby() function, independent of dataframe
-## DOES THIS MAKE ANY SENSE?
+# Below functions test for use of `groupby() function, independent of dataframe
+# DOES THIS MAKE ANY SENSE?
 #
 #def test_PD014_pass_groupby_function_with_no_slicing():
 #    """
@@ -128,7 +128,7 @@ def test_PD014_fail_groupby_method_with_slicing_and_agg_func():
 #
 #def test_PD014_pass_groupby_function_with_no_slicing_with_agg_method():
 #    """
-#    Test that using groupby().agg() without slicing does not result in an error.
+#    Test that groupby().agg() without slicing does not result in an error.
 #    """
 #    statement = "groupby('group_col').agg('agg_func')"
 #    tree = ast.parse(statement)
@@ -139,7 +139,7 @@ def test_PD014_fail_groupby_method_with_slicing_and_agg_func():
 #
 #def test_PD014_pass_groupby_function_with_no_slicing_with_agg_columns():
 #    """
-#    Test that using groupby().agg() without slicing does not result in an error.
+#    Test that groupby().agg() without slicing does not result in an error.
 #    """
 #    statement = "groupby('group_col').agg({'agg_col': 'agg_func'})"
 #    tree = ast.parse(statement)
