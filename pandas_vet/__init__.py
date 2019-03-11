@@ -8,6 +8,9 @@ import attr
 from .version import __version__
 
 
+import logging, inspect
+logging.basicConfig(filename='pandas_vet.log', filemode='w', level=logging.DEBUG)
+
 @attr.s
 class Visitor(ast.NodeVisitor):
     """
@@ -40,6 +43,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_arithmetic_methods(node))
         self.errors.extend(check_for_comparison_methods(node))
         self.errors.extend(check_for_read_table(node))
+        self.errors.extend(check_for_groupby_slicing_with_method(node))
 
     def visit_Subscript(self, node):
         """ 
@@ -217,24 +221,50 @@ def check_for_read_table(node: ast.Call) -> List:
     return []
 
 
-def check_for_groupby_slicing(node: ast.Call) -> List:
+def check_for_groupby_slicing(node: ast.Subscript) -> List:
     """
     Check for slicing operations when using of the `.groupby()` method.
 
     This function will only be called when visiting a `ast.Subscript` node, 
-    which indicates use of slicing syntax.  
+    which indicates use of slicing syntax, and checks for use of slicing
+    syntax directly on a `.groupby()` method, e.g.,
 
-    Error/warning message to recommend use of the standard pattern below, 
+        df.groupby(A)[B]
+
+    Error/warning message to recommend use of the standard pattern below,
     which can handle more generalized cases and returns consistent dataframe.
-    
+
         .groupby('group_cols').agg({'agg_cols': 'agg_funcs'})
 
     """
     if isinstance(node.value, ast.Call):
-        fxn_node = node.value.func
-        if (isinstance(fxn_node, ast.Name) and fxn_node.id == 'groupby') or \
-           (isinstance(fxn_node, ast.Attribute) and fxn_node.attr == 'groupby'):
-            return [PD014(node.lineno, node.col_offset)]
+        if not hasattr(node.value.func, 'attr'): return []
+        if node.value.func.attr == 'groupby':
+            return[PD014(node.lineno, node.col_offset)]
+
+    return []
+
+
+def check_for_groupby_slicing_with_method(node: ast.Call) -> List:
+    """
+    Check for `.groupby()[].agg()` pattern.
+
+    This function will only be called when visiting a `ast.Call` node, and 
+    checks for slicing syntax directly on a preceding `.groupby()` method, e.g.,
+
+        df.groupby(A)[B].agg(C)
+
+    Error/warning message to recommend use of the standard pattern below,
+    which can handle more generalized cases and returns consistent dataframe.
+
+        .groupby('group_cols').agg({'agg_cols': 'agg_funcs'})
+
+    """
+    if not hasattr(node.func, 'value'): return []
+    if isinstance(node.func.value, ast.Subscript):
+        if node.func.value.value.func.attr == 'groupby':
+            return[PD014(node.lineno, node.col_offset)]
+
     return []
 
 
