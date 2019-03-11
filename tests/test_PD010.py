@@ -12,7 +12,15 @@ def test_PD010_pass():
     """
     Test that using .pivot_table() explicitly does not result in an error.
     """
-    statement = "table = df.pivot_table(df, values='D', index=['A', 'B'], columns=['C'], aggfunc=np.sum, fill_value=0)"
+    statement = """table = df.pivot_table(
+        df,
+        values='D',
+        index=['A', 'B'],
+        columns=['C'],
+        aggfunc=np.sum,
+        fill_value=0
+        )
+    """
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = []
@@ -21,9 +29,16 @@ def test_PD010_pass():
 
 def test_PD010_fail_pivot():
     """
-    Test that using either pd.pivot(df) or df.pivot() methods results in an error.
+    Test that using either pd.pivot(df) or df.pivot() methods
+    results in an error.
     """
-    statement = "table = pd.pivot(df, index='foo', columns='bar', values='baz')"
+    statement = """table = pd.pivot(
+        df,
+        index='foo',
+        columns='bar',
+        values='baz'
+        )
+    """
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = [PD010(1, 8)]
