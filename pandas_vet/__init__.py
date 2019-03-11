@@ -41,6 +41,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_arithmetic_methods(node))
         self.errors.extend(check_for_comparison_methods(node))
         self.errors.extend(check_for_read_table(node))
+        self.errors.extend(check_for_merge(node))
 
     def visit_Subscript(self, node):
         """ 
@@ -228,6 +229,19 @@ def check_for_read_table(node: ast.Call) -> List:
     return []
 
 
+def check_for_merge(node: ast.Call) -> List:
+    """
+    Check for use of `.merge()` method on the pandas object.
+
+    Error/warning message to recommend use of `df.merge()` method instead.
+    """
+    pass        ### WIP - NOT YET IMPLEMENTED
+    # need to first determine if the method is applied to pandas or to dataframe
+    #if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
+    #    return [PD014(node.lineno, node.col_offset)]
+    #return []
+
+
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
 
@@ -269,4 +283,7 @@ PD012 = VetError(
 )
 PD013 = VetError(
     message="PD013 '.melt' is preferred to '.stack'; provides same functionality"
+)
+PD015 = VetError(
+    message="PD015 Use '.merge' method instead of 'pd.merge' function. They have equivalent functionality."
 )
