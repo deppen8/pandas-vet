@@ -26,9 +26,18 @@ def test_PD015_pass_merge_on_dataframe():
     statement = "df1.merge(df2)"
     tree = ast.parse(statement)
     expected = []
-
     actual = list(VetPlugin(tree).run())
+    assert actual == expected
 
+
+def test_PD015_pass_merge_on_dataframe_with_multiple_args():
+    """
+    Test that using `df.merge(arg1, arg2)` does not produce an error.
+    """
+    statement = "df1.merge(df2, 'inner')"
+    tree = ast.parse(statement)
+    expected = []
+    actual = list(VetPlugin(tree).run())
     assert actual == expected
 
 
@@ -39,7 +48,5 @@ def test_PD015_fail_merge_on_pandas_object():
     statement = "pd.merge(df1, df2)"
     tree = ast.parse(statement)
     expected = [PD015(1, 0)]
-
     actual = list(VetPlugin(tree).run())
-
     assert actual == expected
