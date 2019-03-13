@@ -238,11 +238,20 @@ def check_for_merge(node: ast.Call) -> List:
 
     Error/warning message to recommend use of `df.merge()` method instead.
     """
-    pass        ### WIP - NOT YET IMPLEMENTED
-    # need to first determine if the method is applied to pandas or to dataframe
-    #if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
-    #    return [PD014(node.lineno, node.col_offset)]
-    #return []
+    # The AST does not retain any of the pandas semantic information, so the
+    # current implementation of this test will infer based on the name of the
+    # object.  If the object name is `pd`, and if the `.merge()` method has at
+    # least two arguments (left, right, ... ) we will assume that it matches 
+    # the pattern that we are trying to check, `pd.merge(left, right)`
+    #if not isinstance( XXX node parent XXX, 'module'): return []
+    if not hasattr(node.func, 'value'): return []   # ignore functions
+    if not node.func.value.id == 'pd': return[]     # assume object name is `pd`
+    if not len(node.args) >= 1: return []           # at least two arguments
+    
+    if isinstance(node.func, ast.Attribute) and \
+       node.func.attr == "merge":
+        return [PD015(node.lineno, node.col_offset)]
+    return []
 
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
