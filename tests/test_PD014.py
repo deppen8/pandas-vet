@@ -112,6 +112,32 @@ def test_PD014_fail_groupby_method_with_slicing_and_agg_func():
     assert actual == expected
 
 
+def test_PD014_pass_groupby_with_slicing_on_chained_method():
+    """
+    test that using .groupby().somefunc[] syntax does not produce an error.
+    """
+    statement = "df.groupby('group_col').somefunc(A)[B]"
+    tree = ast.parse(statement)
+    expected = []
+
+    actual = list(VetPlugin(tree).run())
+
+    assert actual == expected
+
+
+def test_PD014_pass_groupby_on_sliced_object():
+    """
+    test that using .somefunc()[].groupby() syntax does not produce an error.
+    """
+    statement = "df.somefunc(A)[B].groupby('group_col')"
+    tree = ast.parse(statement)
+    expected = []
+
+    actual = list(VetPlugin(tree).run())
+
+    assert actual == expected
+
+
 # Below functions test for use of `groupby() function, independent of dataframe
 # DOES THIS MAKE ANY SENSE?
 #
