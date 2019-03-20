@@ -16,6 +16,6 @@ install:
 
 # run test
 script:
-  - python -m pytest --cov=pandas-vet
+  - pytest --cov=pandas_vet
 after_success:
   — coveralls
