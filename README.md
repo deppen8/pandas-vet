@@ -112,3 +112,11 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 **PD008:** Use '.loc' instead of '.at'.  If speed is important, use numpy.
 
 **PD009:** Use '.iloc' instead of '.iat'.  If speed is important, use numpy.
+
+**PD010** '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality
+
+**PD011** Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous
+
+**PDO12** '.read_csv' is preferred to '.read_table'; provides same functionality
+
+**PD013** '.melt' is preferred to '.stack'; provides same functionality
