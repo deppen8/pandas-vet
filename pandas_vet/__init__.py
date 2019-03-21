@@ -153,18 +153,33 @@ def check_for_comparison_methods(node: ast.Call) -> List:
 
 
 def check_for_ix(node: ast.Subscript) -> List:
+    """
+    Check AST for use of deprecated `.ix[]` attribute on data frame. 
+
+    Error/warning message to recommend use of explicit `.iloc[]` or `.loc[]` instead.
+    """
     if isinstance(node.value, ast.Attribute) and node.value.attr == "ix":
         return [PD007(node.lineno, node.col_offset)]
     return []
 
 
 def check_for_at(node: ast.Subscript) -> List:
+    """
+    Check AST for use of deprecated `.at[]` attribute on data frame. 
+
+    Error/warning message to recommend use of explicit `.loc[]` instead.
+    """
     if isinstance(node.value, ast.Attribute) and node.value.attr == "at":
         return [PD008(node.lineno, node.col_offset)]
     return []
 
 
 def check_for_iat(node: ast.Subscript) -> List:
+    """
+    Check AST for use of deprecated `.iat[]` attribute on data frame. 
+
+    Error/warning message to recommend use of explicit `.iloc[]` instead.
+    """
     if isinstance(node.value, ast.Attribute) and node.value.attr == "iat":
         return [PD009(node.lineno, node.col_offset)]
     return []
