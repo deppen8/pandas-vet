@@ -21,24 +21,41 @@ class Visitor(ast.NodeVisitor):
     errors = attr.ib(default=attr.Factory(list))
 
     def visit_Import(self, node):
+        """ 
+        Called for `import ..` and `import .. as ..` nodes.
+        """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_import_name(node))
 
     def visit_Call(self, node):
+        """ 
+        Called for `.method()` nodes.
+        """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_inplace_false(node))
         self.errors.extend(check_for_isnull(node))
         self.errors.extend(check_for_notnull(node))
         self.errors.extend(check_for_pivot(node))
         self.errors.extend(check_for_unstack(node))
+        self.errors.extend(check_for_stack(node))
         self.errors.extend(check_for_arithmetic_methods(node))
         self.errors.extend(check_for_comparison_methods(node))
+        self.errors.extend(check_for_read_table(node))
 
     def visit_Subscript(self, node):
+        """ 
+        Called for `[slicing]` nodes.
+        """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_for_ix(node))
         self.errors.extend(check_for_at(node))
         self.errors.extend(check_for_iat(node))
+
+    def visit_Attribute(self, node):
+        """ 
+        Called for `.attribute` nodes.
+        """
+        self.errors.extend(check_for_values(node))
 
     def check(self, node):
         self.errors = []
@@ -137,19 +154,34 @@ def check_for_comparison_methods(node: ast.Call) -> List:
 
 
 def check_for_ix(node: ast.Subscript) -> List:
-    if isinstance(node.value, ast.Attribute) and node.value.attr == 'ix':
+    """
+    Check AST for use of deprecated `.ix[]` attribute on data frame. 
+
+    Error/warning message to recommend use of explicit `.iloc[]` or `.loc[]` instead.
+    """
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "ix":
         return [PD007(node.lineno, node.col_offset)]
     return []
 
 
 def check_for_at(node: ast.Subscript) -> List:
-    if isinstance(node.value, ast.Attribute) and node.value.attr == 'at':
+    """
+    Check AST for use of deprecated `.at[]` attribute on data frame. 
+
+    Error/warning message to recommend use of explicit `.loc[]` instead.
+    """
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "at":
         return [PD008(node.lineno, node.col_offset)]
     return []
 
 
 def check_for_iat(node: ast.Subscript) -> List:
-    if isinstance(node.value, ast.Attribute) and node.value.attr == 'iat':
+    """
+    Check AST for use of deprecated `.iat[]` attribute on data frame. 
+
+    Error/warning message to recommend use of explicit `.iloc[]` instead.
+    """
+    if isinstance(node.value, ast.Attribute) and node.value.attr == "iat":
         return [PD009(node.lineno, node.col_offset)]
     return []
 
@@ -175,6 +207,40 @@ def check_for_unstack(node: ast.Call) -> List:
     """
     if isinstance(node.func, ast.Attribute) and node.func.attr == "unstack":
         return [PD010(node.lineno, node.col_offset)]
+    return []
+
+
+def check_for_stack(node: ast.Call) -> List:
+    """
+    Check AST for occurence of the `.stack()` method on the pandas data frame.
+
+    Error/warning message to recommend use of `.melt()` method instead.
+    """
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "stack":
+        return [PD013(node.lineno, node.col_offset)]
+    return []
+
+
+def check_for_values(node: ast.Attribute) -> List:
+    """
+    Check AST for occurence of the `.values` attribute on the pandas data frame.
+
+    Error/warning message to recommend use of `.array` data frame attribute for
+    PandasArray, or `.to_array()` method for NumPy array.
+    """
+    if node.attr == "values":
+        return [PD011(node.lineno, node.col_offset)]
+    return []
+
+  
+def check_for_read_table(node: ast.Call) -> List:
+    """
+    Check AST for occurence of the `.read_table()` method on the pandas object.
+
+    Error/warning message to recommend use of `.read_csv()` method instead.
+    """
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
+        return [PD012(node.lineno, node.col_offset)]
     return []
 
 
@@ -210,4 +276,13 @@ PD009 = VetError(
 )
 PD010 = VetError(
     message="PD010 '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
+)
+PD011 = VetError(
+    message="PD011 Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous"
+)
+PD012 = VetError(
+    message="PDO12 '.read_csv' is preferred to '.read_table'; provides same functionality"
+)
+PD013 = VetError(
+    message="PD013 '.melt' is preferred to '.stack'; provides same functionality"
 )
