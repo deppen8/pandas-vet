@@ -120,3 +120,5 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 **PDO12** '.read_csv' is preferred to '.read_table'; provides same functionality
 
 **PD013** '.melt' is preferred to '.stack'; provides same functionality
+
+**PD015** Use '.merge' method instead of 'pd.merge' function. They have equivalent functionality.
