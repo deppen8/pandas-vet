@@ -41,6 +41,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_arithmetic_methods(node))
         self.errors.extend(check_for_comparison_methods(node))
         self.errors.extend(check_for_read_table(node))
+        self.errors.extend(check_for_groupby_slicing_with_method(node))
 
     def visit_Subscript(self, node):
         """ 
@@ -50,6 +51,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_ix(node))
         self.errors.extend(check_for_at(node))
         self.errors.extend(check_for_iat(node))
+        self.errors.extend(check_for_groupby_slicing(node))
 
     def visit_Attribute(self, node):
         """ 
@@ -243,6 +245,53 @@ def check_for_read_table(node: ast.Call) -> List:
     return []
 
 
+def check_for_groupby_slicing(node: ast.Subscript) -> List:
+    """
+    Check for slicing operations when using of the `.groupby()` method.
+
+    This function will only be called when visiting a `ast.Subscript` node, 
+    which indicates use of slicing syntax, and checks for use of slicing
+    syntax directly on a `.groupby()` method, e.g.,
+
+        df.groupby(A)[B]
+
+    Error/warning message to recommend use of the standard pattern below,
+    which can handle more generalized cases and returns consistent dataframe.
+
+        .groupby('group_cols').agg({'agg_cols': 'agg_funcs'})
+
+    """
+    if isinstance(node.value, ast.Call):
+        if not hasattr(node.value.func, 'attr'): return []
+        if node.value.func.attr == 'groupby':
+            return[PD014(node.lineno, node.col_offset)]
+
+    return []
+
+
+def check_for_groupby_slicing_with_method(node: ast.Call) -> List:
+    """
+    Check for `.groupby()[].agg()` pattern.
+
+    This function will only be called when visiting a `ast.Call` node, and 
+    checks for slicing syntax directly on a preceding `.groupby()` method, e.g.,
+
+        df.groupby(A)[B].agg(C)
+
+    Error/warning message to recommend use of the standard pattern below,
+    which can handle more generalized cases and returns consistent dataframe.
+
+        .groupby('group_cols').agg({'agg_cols': 'agg_funcs'})
+
+    """
+    if not hasattr(node.func, 'value'): return []
+    if isinstance(node.func.value, ast.Subscript):
+        if node.func.value.value.func.attr == 'groupby':
+            return[PD014(node.lineno, node.col_offset)]
+
+    return []
+
+
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
 
@@ -284,4 +333,7 @@ PD012 = VetError(
 )
 PD013 = VetError(
     message="PD013 '.melt' is preferred to '.stack'; provides same functionality"
+)
+PD014 = VetError(
+    message="PDO14 Use standard syntax '.groupby().agg({agg_col: agg_func})' instead of slicing"
 )
