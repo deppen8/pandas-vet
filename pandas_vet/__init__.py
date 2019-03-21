@@ -11,24 +11,24 @@ from .version import __version__
 @attr.s
 class Visitor(ast.NodeVisitor):
     """
-    ast.NodeVisitor will automatically call the appropriate method for a given node type
+    ast.NodeVisitor calls the appropriate method for a given node type
 
     i.e. calling self.visit on an Import node calls visit_import
 
     The `check` functions should be called from the `visit_` method that
-    would produce a 'fail' condition.  
+    would produce a 'fail' condition.
     """
     errors = attr.ib(default=attr.Factory(list))
 
     def visit_Import(self, node):
-        """ 
+        """
         Called for `import ..` and `import .. as ..` nodes.
         """
         self.generic_visit(node)  # continue checking children
         self.errors.extend(check_import_name(node))
 
     def visit_Call(self, node):
-        """ 
+        """
         Called for `.method()` nodes.
         """
         self.generic_visit(node)  # continue checking children
@@ -41,9 +41,10 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_arithmetic_methods(node))
         self.errors.extend(check_for_comparison_methods(node))
         self.errors.extend(check_for_read_table(node))
+        self.errors.extend(check_for_merge(node))
 
     def visit_Subscript(self, node):
-        """ 
+        """
         Called for `[slicing]` nodes.
         """
         self.generic_visit(node)  # continue checking children
@@ -52,7 +53,7 @@ class Visitor(ast.NodeVisitor):
         self.errors.extend(check_for_iat(node))
 
     def visit_Attribute(self, node):
-        """ 
+        """
         Called for `.attribute` nodes.
         """
         self.errors.extend(check_for_values(node))
@@ -108,11 +109,12 @@ def check_for_notnull(node: ast.Call) -> List:
         return [PD004(node.lineno, node.col_offset)]
     return []
 
+
 def check_for_arithmetic_methods(node: ast.Call) -> List:
     """
-    Check AST for occurence of explicit arithmetic methods.  
+    Check AST for occurence of explicit arithmetic methods.
 
-    Error/warning message to recommend use of binary arithmetic operators instead.
+    Error/warning message to recommend use of binary arithmetic operators.
     """
     arithmetic_methods = [
         'add',
@@ -133,21 +135,23 @@ def check_for_arithmetic_methods(node: ast.Call) -> List:
         '%',
         ]
 
-    if isinstance(node.func, ast.Attribute) and node.func.attr in arithmetic_methods:
+    if isinstance(node.func, ast.Attribute) and \
+       node.func.attr in arithmetic_methods:
         return [PD005(node.lineno, node.col_offset)]
     return []
 
 
 def check_for_comparison_methods(node: ast.Call) -> List:
     """
-    Check AST for occurence of explicit comparison methods.  
+    Check AST for occurence of explicit comparison methods.
 
-    Error/warning message to recommend use of binary comparison operators instead.
+    Error/warning message to recommend use of binary comparison operators.
     """
     comparison_methods = ['gt', 'lt', 'ge', 'le', 'eq', 'ne']
     comparison_operators = ['>',  '<',  '>=', '<=', '==', '!=']
 
-    if isinstance(node.func, ast.Attribute) and node.func.attr in comparison_methods:
+    if isinstance(node.func, ast.Attribute) and \
+       node.func.attr in comparison_methods:
         return [PD006(node.lineno, node.col_offset)]
     return []
 
@@ -200,9 +204,9 @@ def check_for_pivot(node: ast.Call) -> List:
 
 def check_for_unstack(node: ast.Call) -> List:
     """
-    Check AST for occurence of the `.unstack()` method on the pandas data frame.
+    Check occurence of the `.unstack()` method on the pandas data frame.
 
-    Error/warning message to recommend use of `.pivot_table()` method instead.
+    Error/warning message to recommend use of `.pivot_table()` method.
     """
     if isinstance(node.func, ast.Attribute) and node.func.attr == "unstack":
         return [PD010(node.lineno, node.col_offset)]
@@ -222,16 +226,16 @@ def check_for_stack(node: ast.Call) -> List:
 
 def check_for_values(node: ast.Attribute) -> List:
     """
-    Check AST for occurence of the `.values` attribute on the pandas data frame.
+    Check occurence of the `.values` attribute on the pandas data frame.
 
-    Error/warning message to recommend use of `.array` data frame attribute for
-    PandasArray, or `.to_array()` method for NumPy array.
+    Error/warning message to recommend use of `.array` data frame attribute
+    for PandasArray, or `.to_array()` method for NumPy array.
     """
     if node.attr == "values":
         return [PD011(node.lineno, node.col_offset)]
     return []
 
-  
+
 def check_for_read_table(node: ast.Call) -> List:
     """
     Check AST for occurence of the `.read_table()` method on the pandas object.
@@ -240,6 +244,27 @@ def check_for_read_table(node: ast.Call) -> List:
     """
     if isinstance(node.func, ast.Attribute) and node.func.attr == "read_table":
         return [PD012(node.lineno, node.col_offset)]
+    return []
+
+
+def check_for_merge(node: ast.Call) -> List:
+    """
+    Check for use of `.merge()` method on the pandas object.
+
+    Error/warning message to recommend use of `df.merge()` method instead.
+    """
+    # The AST does not retain any of the pandas semantic information, so the
+    # current implementation of this test will infer based on the name of the
+    # object.  If the object name is `pd`, and if the `.merge()` method has at
+    # least two arguments (left, right, ... ) we will assume that it matches 
+    # the pattern that we are trying to check, `pd.merge(left, right)`
+    if not hasattr(node.func, 'value'): return []   # ignore functions
+    if not node.func.value.id == 'pd': return[]     # assume object name is `pd`
+    if not len(node.args) >= 2: return []           # at least two arguments
+    
+    if isinstance(node.func, ast.Attribute) and \
+       node.func.attr == "merge":
+        return [PD015(node.lineno, node.col_offset)]
     return []
 
 
@@ -284,4 +309,7 @@ PD012 = VetError(
 )
 PD013 = VetError(
     message="PD013 '.melt' is preferred to '.stack'; provides same functionality"
+)
+PD015 = VetError(
+    message="PD015 Use '.merge' method instead of 'pd.merge' function. They have equivalent functionality."
 )
