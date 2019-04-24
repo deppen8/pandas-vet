@@ -1,9 +1,14 @@
 # pandas-vet
 
 [![Build Status](https://travis-ci.org/deppen8/pandas-vet.svg?branch=master)](https://travis-ci.org/deppen8/pandas-vet)
-[![PyPI - Status](https://img.shields.io/pypi/status/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
-[![PyPI](https://img.shields.io/pypi/v/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
 [![PyPI - License](https://img.shields.io/pypi/l/pandas-vet.svg)](https://github.com/deppen8/pandas-vet/blob/master/LICENSE)
+
+[![PyPI](https://img.shields.io/pypi/v/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
+[![PyPI - Status](https://img.shields.io/pypi/status/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
+
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/pandas-vet.svg)](https://anaconda.org/conda-forge/pandas-vet)
+[![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pandas-vet.svg)](https://anaconda.org/conda-forge/pandas-vet)
 
 `pandas-vet` is a plugin for `flake8` that provides opinionated linting for `pandas` code.
 
@@ -25,6 +30,12 @@ The plugin is on PyPI and can be installed with:
 
 ```bash
 pip install pandas-vet
+```
+
+It can also be installed with `conda`:
+
+```bash
+conda install -c conda-forge pandas-vet
 ```
 
 `pandas-vet` is tested under Python 3.5 and 3.6 and should work with later versions as well.
