@@ -87,8 +87,8 @@ def check_import_name(node: ast.Import) -> List:
 
     Error/warning message to recommend use of 'pd' alias.
 
-        :param node:   an AST node of type Import
-        :return errors:   returns a list of errors of type PD001 with line number and column offset
+    :param node:   an AST node of type Import
+    :return errors:    list of errors of type PD001 with line number and column offset
     """
     errors = []
     for n in node.names:
@@ -108,8 +108,8 @@ def check_inplace_false(node: ast.Call) -> List:
 
     Error/warning message to recommend avoidance of inplace=True due to inconsistent behavior.
 
-        :param node:   an AST node of type Call
-        :return errors:   returns a list of errors of type PD002 with line number and column offset
+    :param node:   an AST node of type Call
+    :return errors:   list of errors of type PD002 with line number and column offset
     """
     errors = []
     for kw in node.keywords:
@@ -129,8 +129,8 @@ def check_for_isnull(node: ast.Call) -> List:
 
     Error/warning message to recommend usage of .isna() instead of .isnull(). Functionality is equivalent
 
-        :param node:   an AST node of type Call
-        :return errors:   returns a list of errors of type PD003 with line number and column offset
+    :param node:   an AST node of type Call
+    :return errors:   list of errors of type PD003 with line number and column offset
     """
     if isinstance(node.func, ast.Attribute) and node.func.attr == "isnull":
         return [PD003(node.lineno, node.col_offset)]
@@ -148,8 +148,8 @@ def check_for_notnull(node: ast.Call) -> List:
 
     Error/warning message to recommend usage of .notna() instead of .notnull(). Functionality is equivalent
 
-        :param node:   an AST node of type Call
-        :return errors:   returns a list of errors of type PD004 with line number and column offset
+    :param node:   an AST node of type Call
+    :return errors:   list of errors of type PD004 with line number and column offset
     """
     if isinstance(node.func, ast.Attribute) and node.func.attr == "notnull":
         return [PD004(node.lineno, node.col_offset)]
