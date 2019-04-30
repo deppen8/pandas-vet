@@ -83,6 +83,13 @@ class VetPlugin:
 
 
 def check_import_name(node: ast.Import) -> List:
+    """Check AST for imports of pandas not using the preferred alias 'pd'.
+
+    Error/warning message to recommend use of 'pd' alias.
+
+    :param node: an AST node of type Import
+    :return errors: list of errors of type PD001 with line number and column offset
+    """
     errors = []
     for n in node.names:
         if n.name == "pandas" and n.asname != "pd":
@@ -91,6 +98,19 @@ def check_import_name(node: ast.Import) -> List:
 
 
 def check_inplace_false(node: ast.Call) -> List:
+    """Check AST for function calls using inplace=True keyword argument.
+
+    Disapproved:
+        df.method(inplace=True)
+
+    Approved:
+        df = df.method(inplace=False)
+
+    Error/warning message to recommend avoidance of inplace=True due to inconsistent behavior.
+
+    :param node: an AST node of type Call
+    :return errors: list of errors of type PD002 with line number and column offset
+    """
     errors = []
     for kw in node.keywords:
         if kw.arg == "inplace" and kw.value.value is True:
@@ -99,12 +119,38 @@ def check_inplace_false(node: ast.Call) -> List:
 
 
 def check_for_isnull(node: ast.Call) -> List:
+    """Check AST for function calls using the isnull() method.
+
+    Disapproved:
+        df.isnull()
+
+    Approved:
+        df.isna()
+
+    Error/warning message to recommend usage of .isna() instead of .isnull(). Functionality is equivalent
+
+    :param node: an AST node of type Call
+    :return errors: list of errors of type PD003 with line number and column offset
+    """
     if isinstance(node.func, ast.Attribute) and node.func.attr == "isnull":
         return [PD003(node.lineno, node.col_offset)]
     return []
 
 
 def check_for_notnull(node: ast.Call) -> List:
+    """Check AST for function calls using the notnull() method.
+
+    Disapproved:
+        df.notnull()
+
+    Approved:
+        df.notna()
+
+    Error/warning message to recommend usage of .notna() instead of .notnull(). Functionality is equivalent
+
+    :param node: an AST node of type Call
+    :return errors: list of errors of type PD004 with line number and column offset
+    """
     if isinstance(node.func, ast.Attribute) and node.func.attr == "notnull":
         return [PD004(node.lineno, node.col_offset)]
     return []
