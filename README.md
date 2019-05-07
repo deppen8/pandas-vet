@@ -104,6 +104,10 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 - [Aly Sivji](https://twitter.com/CaiusSivjus)
 - Tim Smith
 
+### Other awesome contributors
+
+- Earl Clark
+
 ## List of warnings
 
 **PD001:** pandas should always be imported as 'import pandas as pd'
