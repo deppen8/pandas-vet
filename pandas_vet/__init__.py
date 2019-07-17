@@ -204,7 +204,7 @@ def check_for_comparison_methods(node: ast.Call) -> List:
 
 def check_for_ix(node: ast.Subscript) -> List:
     """
-    Check AST for use of deprecated `.ix[]` attribute on data frame. 
+    Check AST for use of deprecated `.ix[]` attribute on data frame.
 
     Error/warning message to recommend use of explicit `.iloc[]` or `.loc[]` instead.
     """
@@ -215,7 +215,7 @@ def check_for_ix(node: ast.Subscript) -> List:
 
 def check_for_at(node: ast.Subscript) -> List:
     """
-    Check AST for use of deprecated `.at[]` attribute on data frame. 
+    Check AST for use of deprecated `.at[]` attribute on data frame.
 
     Error/warning message to recommend use of explicit `.loc[]` instead.
     """
@@ -226,7 +226,7 @@ def check_for_at(node: ast.Subscript) -> List:
 
 def check_for_iat(node: ast.Subscript) -> List:
     """
-    Check AST for use of deprecated `.iat[]` attribute on data frame. 
+    Check AST for use of deprecated `.iat[]` attribute on data frame.
 
     Error/warning message to recommend use of explicit `.iloc[]` instead.
     """
@@ -302,12 +302,17 @@ def check_for_merge(node: ast.Call) -> List:
     # The AST does not retain any of the pandas semantic information, so the
     # current implementation of this test will infer based on the name of the
     # object.  If the object name is `pd`, and if the `.merge()` method has at
-    # least two arguments (left, right, ... ) we will assume that it matches 
+    # least two arguments (left, right, ... ) we will assume that it matches
     # the pattern that we are trying to check, `pd.merge(left, right)`
-    if not hasattr(node.func, 'value'): return []   # ignore functions
-    if not node.func.value.id == 'pd': return[]     # assume object name is `pd`
+    if not hasattr(node.func, 'value'):
+        return []   # ignore functions
+    elif not hasattr(node.func.value, 'id'):
+        return [] # it could be the case that id is not present
+
+    if node.func.value.id != 'pd': return[]     # assume object name is `pd`
+
     if not len(node.args) >= 2: return []           # at least two arguments
-    
+
     if isinstance(node.func, ast.Attribute) and \
        node.func.attr == "merge":
         return [PD015(node.lineno, node.col_offset)]
