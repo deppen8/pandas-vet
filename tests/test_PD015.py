@@ -50,3 +50,11 @@ def test_PD015_fail_merge_on_pandas_object():
     expected = [PD015(1, 0)]
     actual = list(VetPlugin(tree).run())
     assert actual == expected
+
+
+def test_PD015_pass_merge_no_id_func_value():
+    statement = "pd.to_datetime(timestamp * 10 ** 9).strftime('%Y-%m-%d %H:%M:%S.%f')"
+    tree = ast.parse(statement)
+    expected = []
+    actual = list(VetPlugin(tree).run())
+    assert actual == expected
