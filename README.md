@@ -107,6 +107,7 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 ### Other awesome contributors
 
 - Earl Clark
+- Leandro Leites
 
 ## List of warnings
 
