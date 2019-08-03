@@ -18,6 +18,7 @@ class Visitor(ast.NodeVisitor):
     The `check` functions should be called from the `visit_` method that
     would produce a 'fail' condition.
     """
+
     errors = attr.ib(default=attr.Factory(list))
 
     def visit_Import(self, node):
@@ -56,7 +57,15 @@ class Visitor(ast.NodeVisitor):
         """
         Called for `.attribute` nodes.
         """
+        self.generic_visit(node)  # continue checking children
         self.errors.extend(check_for_values(node))
+
+    def visit_Name(self, node):
+        """
+        Called for `Assignment` nodes.
+        """
+        self.generic_visit(node)  # continue checking children
+        self.errors.extend(check_for_df(node))
 
     def check(self, node):
         self.errors = []
@@ -163,26 +172,24 @@ def check_for_arithmetic_methods(node: ast.Call) -> List:
     Error/warning message to recommend use of binary arithmetic operators.
     """
     arithmetic_methods = [
-        'add',
-        'sub', 'subtract',
-        'mul', 'multiply',
-        'div', 'divide', 'truediv',
-        'pow',
-        'floordiv',
-        'mod',
-        ]
-    arithmetic_operators = [
-        '+',
-        '-',
-        '*',
-        '/',
-        '**',
-        '//',
-        '%',
-        ]
+        "add",
+        "sub",
+        "subtract",
+        "mul",
+        "multiply",
+        "div",
+        "divide",
+        "truediv",
+        "pow",
+        "floordiv",
+        "mod",
+    ]
+    arithmetic_operators = ["+", "-", "*", "/", "**", "//", "%"]
 
-    if isinstance(node.func, ast.Attribute) and \
-       node.func.attr in arithmetic_methods:
+    if (
+        isinstance(node.func, ast.Attribute)
+        and node.func.attr in arithmetic_methods
+    ):
         return [PD005(node.lineno, node.col_offset)]
     return []
 
@@ -193,11 +200,13 @@ def check_for_comparison_methods(node: ast.Call) -> List:
 
     Error/warning message to recommend use of binary comparison operators.
     """
-    comparison_methods = ['gt', 'lt', 'ge', 'le', 'eq', 'ne']
-    comparison_operators = ['>',  '<',  '>=', '<=', '==', '!=']
+    comparison_methods = ["gt", "lt", "ge", "le", "eq", "ne"]
+    comparison_operators = [">", "<", ">=", "<=", "==", "!="]
 
-    if isinstance(node.func, ast.Attribute) and \
-       node.func.attr in comparison_methods:
+    if (
+        isinstance(node.func, ast.Attribute)
+        and node.func.attr in comparison_methods
+    ):
         return [PD006(node.lineno, node.col_offset)]
     return []
 
@@ -304,18 +313,26 @@ def check_for_merge(node: ast.Call) -> List:
     # object.  If the object name is `pd`, and if the `.merge()` method has at
     # least two arguments (left, right, ... ) we will assume that it matches
     # the pattern that we are trying to check, `pd.merge(left, right)`
-    if not hasattr(node.func, 'value'):
-        return []   # ignore functions
-    elif not hasattr(node.func.value, 'id'):
-        return [] # it could be the case that id is not present
+    if not hasattr(node.func, "value"):
+        return []  # ignore functions
+    elif not hasattr(node.func.value, "id"):
+        return []  # it could be the case that id is not present
 
-    if node.func.value.id != 'pd': return[]     # assume object name is `pd`
+    if node.func.value.id != "pd":
+        return []  # assume object name is `pd`
 
-    if not len(node.args) >= 2: return []           # at least two arguments
+    if not len(node.args) >= 2:
+        return []  # at least two arguments
 
-    if isinstance(node.func, ast.Attribute) and \
-       node.func.attr == "merge":
+    if isinstance(node.func, ast.Attribute) and node.func.attr == "merge":
         return [PD015(node.lineno, node.col_offset)]
+    return []
+
+
+def check_for_df(node: ast.Name) -> List:
+    # for variable in node.targets:
+    if node.id == "df" and isinstance(node.ctx, ast.Store):
+        return [PD901(node.lineno, node.col_offset)]
     return []
 
 
@@ -325,21 +342,22 @@ VetError = partial(partial, error, type=VetPlugin)
 PD001 = VetError(
     message="PD001 pandas should always be imported as 'import pandas as pd'"
 )
+
 PD002 = VetError(
     message="PD002 'inplace = True' should be avoided; it has inconsistent behavior"
 )
+
 PD003 = VetError(
     message="PD003 '.isna' is preferred to '.isnull'; functionality is equivalent"
 )
+
 PD004 = VetError(
     message="PD004 '.notna' is preferred to '.notnull'; functionality is equivalent"
 )
-PD005 = VetError(
-    message="PD005 Use arithmetic operator instead of method"
-)
-PD006 = VetError(
-    message="PD006 Use comparison operator instead of method"
-)
+PD005 = VetError(message="PD005 Use arithmetic operator instead of method")
+
+PD006 = VetError(message="PD006 Use comparison operator instead of method")
+
 PD007 = VetError(
     message="PD007 '.ix' is deprecated; use more explicit '.loc' or '.iloc'"
 )
@@ -363,4 +381,8 @@ PD013 = VetError(
 )
 PD015 = VetError(
     message="PD015 Use '.merge' method instead of 'pd.merge' function. They have equivalent functionality."
+)
+
+PD901 = VetError(
+    message="PD901 'df' is not very descriptive. Be kind to your future self."
 )

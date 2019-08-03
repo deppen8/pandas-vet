@@ -137,3 +137,7 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 **PD013** '.melt' is preferred to '.stack'; provides same functionality
 
 **PD015** Use '.merge' method instead of 'pd.merge' function. They have equivalent functionality.
+
+### *Very* Opinionated Warnings
+
+**PD901** 'df' is not very descriptive. Be kind to your future self.
