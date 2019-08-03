@@ -12,7 +12,7 @@ def test_PD012_pass_read_csv():
     """
     Test that using .read_csv() explicitly does not result in an error.
     """
-    statement = "df = pd.read_csv(input_file)"
+    statement = "employees = pd.read_csv(input_file)"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = []
@@ -23,10 +23,10 @@ def test_PD012_fail_read_table():
     """
     Test that using .read_table() method results in an error.
     """
-    statement = "df = pd.read_table(input_file)"
+    statement = "employees = pd.read_table(input_file)"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
-    expected = [PD012(1, 5)]
+    expected = [PD012(1, 12)]
     assert actual == expected
 
 
@@ -34,7 +34,7 @@ def test_PD012_node_Name_pass():
     """
     Test that where 'read_table' is a Name does NOT raise an error
     """
-    statement = "df = read_table"
+    statement = "employees = read_table"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = []
