@@ -140,4 +140,10 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 
 ### *Very* Opinionated Warnings
 
-**PD901** 'df' is not very descriptive. Be kind to your future self.
+These warnings are turned off by default. To enable them, add the `-annoy` flag to your command, e.g.,
+
+```bash
+$ flake8 --annoy my_file.py
+```
+
+**PD901** 'df' is a bad variable name. Be kinder to your future self.
