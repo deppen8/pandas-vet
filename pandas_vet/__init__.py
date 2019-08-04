@@ -90,6 +90,22 @@ class VetPlugin:
         except Exception as e:
             raise PandasVetException(e)
 
+    @staticmethod
+    def add_options(optmanager):
+        """Informs flake8 to ignore PD9xx by default."""
+        optmanager.extend_default_ignore(disabled_by_default)
+
+        optmanager.add_option(
+            long_option_name="--annoy",
+            action="store_true",
+            dest="annoy",
+            default=False,
+        )
+
+        options, xargs = optmanager.parse_args()
+        if options.annoy:
+            optmanager.remove_from_default_ignore(disabled_by_default)
+
 
 def check_import_name(node: ast.Import) -> List:
     """Check AST for imports of pandas not using the preferred alias 'pd'.
@@ -330,7 +346,9 @@ def check_for_merge(node: ast.Call) -> List:
 
 
 def check_for_df(node: ast.Name) -> List:
-    # for variable in node.targets:
+    """
+    Check for variables named `df`
+    """
     if node.id == "df" and isinstance(node.ctx, ast.Store):
         return [PD901(node.lineno, node.col_offset)]
     return []
@@ -338,6 +356,8 @@ def check_for_df(node: ast.Name) -> List:
 
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
+
+disabled_by_default = ["PD901"]
 
 PD001 = VetError(
     message="PD001 pandas should always be imported as 'import pandas as pd'"
@@ -384,5 +404,5 @@ PD015 = VetError(
 )
 
 PD901 = VetError(
-    message="PD901 'df' is not very descriptive. Be kind to your future self."
+    message="PD901 'df' is a bad variable name. Be kinder to your future self."
 )
