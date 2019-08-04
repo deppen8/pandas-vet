@@ -355,7 +355,7 @@ def check_for_df(node: ast.Name) -> List:
 error = namedtuple("Error", ["lineno", "col", "message", "type"])
 VetError = partial(partial, error, type=VetPlugin)
 
-disabled_by_default = ["PD901"]
+disabled_by_default = ["PD9"]
 
 PD001 = VetError(
     message="PD001 pandas should always be imported as 'import pandas as pd'"
