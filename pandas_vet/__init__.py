@@ -200,7 +200,6 @@ def check_for_arithmetic_methods(node: ast.Call) -> List:
         "floordiv",
         "mod",
     ]
-    arithmetic_operators = ["+", "-", "*", "/", "**", "//", "%"]
 
     if (
         isinstance(node.func, ast.Attribute)
@@ -217,7 +216,6 @@ def check_for_comparison_methods(node: ast.Call) -> List:
     Error/warning message to recommend use of binary comparison operators.
     """
     comparison_methods = ["gt", "lt", "ge", "le", "eq", "ne"]
-    comparison_operators = [">", "<", ">=", "<=", "==", "!="]
 
     if (
         isinstance(node.func, ast.Attribute)
