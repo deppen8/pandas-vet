@@ -1,15 +1,10 @@
 import setuptools
 
-requires = [
-    "flake8 > 3.0.0",
-    "attrs",
-]
+requires = ["flake8 > 3.0.0", "attrs"]
 
-tests_requires = [
-    "pytest > 4.0.0"
-]
+tests_requires = ["pytest > 4.0.0"]
 
-flake8_entry_point = 'flake8.extension'
+flake8_entry_point = "flake8.extension"
 
 with open("README.md", "rt") as f:
     long_description = f.read()
@@ -26,16 +21,10 @@ setuptools.setup(
     author="Jacob Deppen",
     author_email="deppen.8@gmail.com",
     url="https://github.com/deppen8/pandas-vet",
-    packages=[
-        "pandas_vet",
-    ],
+    packages=["pandas_vet"],
     install_requires=requires,
     tests_require=tests_requires,
-    entry_points={
-        flake8_entry_point: [
-            'PD = pandas_vet:VetPlugin',
-        ],
-    },
+    entry_points={flake8_entry_point: ["PD = pandas_vet:VetPlugin"]},
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",
