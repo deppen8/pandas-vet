@@ -14,17 +14,9 @@ def test_PD005_pass_arithmetic_operator():
     Test that explicit use of binary arithmetic operator does not
     result in an error.
     """
-    arithmetic_operators = [
-        '+',
-        '-',
-        '*',
-        '/',
-        '**',
-        '//',
-        '%',
-        ]
+    arithmetic_operators = ["+", "-", "*", "/", "**", "//", "%"]
     for op in arithmetic_operators:
-        statement = 'C = A {0} B'.format(op)
+        statement = "C = A {0} B".format(op)
         tree = ast.parse(statement)
         actual = list(VetPlugin(tree).run())
         expected = []
@@ -36,16 +28,20 @@ def test_PD005_fail_arithmetic_method():
     Test that using arithmetic method results in an error.
     """
     arithmetic_methods = [
-        'add',
-        'sub', 'subtract',
-        'mul', 'multiply',
-        'div', 'divide', 'truediv',
-        'pow',
-        'floordiv',
-        'mod',
-        ]
+        "add",
+        "sub",
+        "subtract",
+        "mul",
+        "multiply",
+        "div",
+        "divide",
+        "truediv",
+        "pow",
+        "floordiv",
+        "mod",
+    ]
     for op in arithmetic_methods:
-        statement = 'C = A.{0}(B)'.format(op)
+        statement = "C = A.{0}(B)".format(op)
         tree = ast.parse(statement)
         actual = list(VetPlugin(tree).run())
         expected = [PD005(1, 4)]

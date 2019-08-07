@@ -138,3 +138,13 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 **PD013** '.melt' is preferred to '.stack'; provides same functionality
 
 **PD015** Use '.merge' method instead of 'pd.merge' function. They have equivalent functionality.
+
+### *Very* Opinionated Warnings
+
+These warnings are turned off by default. To enable them, add the `-annoy` flag to your command, e.g.,
+
+```bash
+$ flake8 --annoy my_file.py
+```
+
+**PD901** 'df' is a bad variable name. Be kinder to your future self.
