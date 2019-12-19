@@ -8,6 +8,8 @@ language: python
 python:
   - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
 
 # install packages
 install:
@@ -17,5 +19,3 @@ install:
 # run test
 script:
   - pytest --cov=pandas_vet
-after_success:
-  — coveralls
