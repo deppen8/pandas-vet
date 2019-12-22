@@ -1,4 +1,4 @@
 -r requirements.txt
 pytest>4.0.0
 pytest-cov>=2.6.1
-coveralls>=1.5.1
+
