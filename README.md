@@ -66,9 +66,11 @@ Because this project started during the PyCascades 2019 sprints, we adopt the Py
 
 2. Fork the repo and create a new branch for your enhancement/fix.
 
-3. Write code, docs, etc.
+3. Get a development environment set up with your favorite environment manager (`conda`, `virtualenv`, etc.). You can create one from `pip install -r requirements_test.txt` or, if you use Docker, you can build an image from the Dockerfile included in this repo.
 
-4. We use `pytest` and `flake8` to validate our codebase. The TravisCI integration will complain on pull requests if there are any failing tests or lint violations. To check these locally, run the following commands:
+4. Write code, docs, etc.
+
+5. We use `pytest` and `flake8` to validate our codebase. The TravisCI integration will complain on pull requests if there are any failing tests or lint violations. To check these locally, run the following commands:
 
 ```bash
 pytest tests
@@ -78,11 +80,11 @@ pytest tests
 flake8 pandas_vet setup.py tests --exclude tests/data
 ```
 
-5. Push to your forked repo.
+6. Push to your forked repo.
 
-6. Submit pull request to the parent repo from your branch. Be sure to write a clear message and reference the Issue # that relates to your pull request.
+7. Submit pull request to the parent repo from your branch. Be sure to write a clear message and reference the Issue # that relates to your pull request.
 
-7. Feel good about giving back to open source projects.
+8. Feel good about giving back to open source projects.
 
 ### How to add a check to the linter
 
