@@ -38,7 +38,7 @@ It can also be installed with `conda`:
 conda install -c conda-forge pandas-vet
 ```
 
-`pandas-vet` is tested under Python 3.5 and 3.6 and should work with later versions as well.
+`pandas-vet` is tested under Python 3.5, 3.6, 3.7, 3.8, as defined in our [.travis.yml](https://github.com/deppen8/pandas-vet/blob/master/.travis.yml#L8-L12)
 
 ## Usage
 
@@ -106,7 +106,7 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 
 - Sam Beck
 - [Jacob Deppen](https://twitter.com/jacob_deppen)
-- Walt Javins
+- [Walt](https://github.com/wadells)
 - Charles Simchick
 - [Aly Sivji](https://twitter.com/CaiusSivjus)
 - Tim Smith
