@@ -19,3 +19,13 @@ pyparsing==2.4.6
 six==1.14.0
 wcwidth==0.1.8
 zipp==2.2.0
+
+# lint toolchain, top level
+flake8==3.7.9
+
+# lint toolchain, transitive dependencies
+entrypoints==0.3
+mccabe==0.6.1
+pluggy==0.13.1
+pycodestyle==2.5.0
+pyflakes==2.1.1
