@@ -101,7 +101,7 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 
 - Sam Beck
 - [Jacob Deppen](https://twitter.com/jacob_deppen)
-- Walt Javins
+- [Walt](https://github.com/wadells)
 - Charles Simchick
 - [Aly Sivji](https://twitter.com/CaiusSivjus)
 - Tim Smith
