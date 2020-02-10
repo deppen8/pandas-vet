@@ -6,14 +6,28 @@ sudo: false
 # python settings
 language: python
 python:
-  - "3.5"
-  - "3.6"
-  - "3.7"
   - "3.8"
+  - "3.7"
+  - "3.6"
+  - "3.5"
+
+# for use in linting and static analysis
+env:
+  - SOURCES="pandas_vet setup.py tests --exclude tests/data"
+
+# include allows has the following jobs run only against the first
+# entry in the python array. We use this because we both black and
+# flake8 only need to be run across the sources once.
+jobs:
+  include:
+    - install: pip install -r reqs/lint.txt
+      script: flake8 $SOURCES
+    - install: pip install -r reqs/lint.txt
+      script: black --check $SOURCES
 
 # install packages
 install:
-  - pip install -r requirements_test.txt
+  - pip install -r reqs/test.txt
   - pip install -e .
 
 # run test
