@@ -19,5 +19,5 @@ pyparsing==2.4.6
 six==1.14.0
 wcwidth==0.1.8
 # zipp > 1.1.0 doesn't support python 3.5, this can be dumped once 3.5 support is dropped
-zipp==1.1.0
+zipp==2.2.0
 
