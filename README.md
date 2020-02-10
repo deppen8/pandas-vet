@@ -66,7 +66,12 @@ Because this project started during the PyCascades 2019 sprints, we adopt the Py
 
 2. Fork the repo and create a new branch for your enhancement/fix.
 
-3. Get a development environment set up with your favorite environment manager (`conda`, `virtualenv`, etc.). You can create one from `pip install -r requirements_test.txt` or, if you use Docker, you can build an image from the Dockerfile included in this repo.
+3. Get a development environment set up with your favorite environment manager (`conda`, `virtualenv`, etc.). 
+
+    1. You can create one from `pip install -r requirements_test.txt` or, if you use Docker, you can build an image from the Dockerfile included in this repo.
+
+    2. Once your enviroment is set up you will need to install pandas-vet in development mode. Use `pip install -e .` (use this if you are alreay in your virtual enviroment) or `pip install -e <path>` (use this one if not in the virtual enviroment and prefer to state explicitly where it is going).
+
 
 4. Write code, docs, etc.
 
