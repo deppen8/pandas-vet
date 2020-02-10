@@ -201,10 +201,7 @@ def check_for_arithmetic_methods(node: ast.Call) -> List:
         "mod",
     ]
 
-    if (
-        isinstance(node.func, ast.Attribute)
-        and node.func.attr in arithmetic_methods
-    ):
+    if isinstance(node.func, ast.Attribute) and node.func.attr in arithmetic_methods:
         return [PD005(node.lineno, node.col_offset)]
     return []
 
@@ -217,10 +214,7 @@ def check_for_comparison_methods(node: ast.Call) -> List:
     """
     comparison_methods = ["gt", "lt", "ge", "le", "eq", "ne"]
 
-    if (
-        isinstance(node.func, ast.Attribute)
-        and node.func.attr in comparison_methods
-    ):
+    if isinstance(node.func, ast.Attribute) and node.func.attr in comparison_methods:
         return [PD006(node.lineno, node.col_offset)]
     return []
 
