@@ -11,8 +11,9 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os.path
+_pandas_vet_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'pandas_vet'))
 # import sys
-# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# sys.path.insert(0, _pandas_vet_path)
 
 
 # -- Project information -----------------------------------------------------
@@ -21,8 +22,17 @@ project = 'pandas-vet'
 copyright = '2020, Jacob Deppen'
 author = 'Jacob Deppen'
 
+
+def _pandas_vet_version():
+    version = {}
+    with open(os.path.join(_pandas_vet_path, "version.py")) as fp:
+        # exec? well, it's what our setup.py does.
+        exec(fp.read(), version)
+    return version['__version__']
+
+
 # The full version, including alpha/beta/rc tags
-release = '0.2.2'
+release = _pandas_vet_version()
 
 
 # -- General configuration ---------------------------------------------------
@@ -60,7 +70,7 @@ html_static_path = ['_static']
 # -- Extension configuration -------------------------------------------------
 
 autoapi_dirs = [
-    os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'pandas_vet'))
+    _pandas_vet_path
 ]
 
 # There's only one module, so we'll link directly to it insead of autoapi/index.
