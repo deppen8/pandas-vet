@@ -61,3 +61,6 @@ html_static_path = ['_static']
 autoapi_dirs = [
     os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'pandas_vet'))
 ]
+
+# There's only one module, so we'll link directly to it insead of autoapi/index.
+autoapi_add_toctree_entry = False
