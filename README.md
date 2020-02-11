@@ -1,6 +1,7 @@
 # pandas-vet
 
 [![Build Status](https://travis-ci.org/deppen8/pandas-vet.svg?branch=master)](https://travis-ci.org/deppen8/pandas-vet)
+[![Docs Status](https://readthedocs.org/projects/pip/badge/)](https://readthedocs.org/projects/pandas-vet/builds/)
 [![PyPI - License](https://img.shields.io/pypi/l/pandas-vet.svg)](https://github.com/deppen8/pandas-vet/blob/master/LICENSE)
 
 [![PyPI](https://img.shields.io/pypi/v/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
