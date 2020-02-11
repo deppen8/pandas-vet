@@ -26,7 +26,11 @@ jobs:
       script: black --check $SOURCES
     - name: docs
       install: pip install -r reqs/docs.txt
-      script: cd docs && python -m sphinx.cmd.build -M html . _build
+      script:
+        - cd docs
+        - python -m sphinx.cmd.build -M html . _build
+        - python -m sphinx.cmd.build -M linkcheck . _build
+        - cat _build/linkcheck/output.txt
 
 # install packages
 install:
