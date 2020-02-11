@@ -1,2 +1,3 @@
 -r reqs/test.txt
 -r reqs/lint.txt
+-r reqs/docs.txt
