@@ -83,5 +83,8 @@ autoapi_dirs = [_pandas_vet_path]
 # There's only one module, so we'll link directly to it insead of autoapi/index.
 autoapi_add_toctree_entry = False
 
+# FIXME: linkcheck failing on anchors in github.com README
+linkcheck_ignore = ["^https://github.com/.*blob.*#"]
+
 todo_include_todos = True
 todo_emit_warnings = True
