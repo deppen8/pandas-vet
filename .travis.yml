@@ -13,7 +13,7 @@ python:
 
 # for use in linting and static analysis
 env:
-  - SOURCES="pandas_vet setup.py tests --exclude tests/data"
+  - SOURCES="pandas_vet setup.py tests docs/conf.py --exclude tests/data"
 
 # include allows has the following jobs run only against the first
 # entry in the python array. We use this because we both black and
@@ -24,6 +24,9 @@ jobs:
       script: flake8 $SOURCES
     - install: pip install -r reqs/lint.txt
       script: black --check $SOURCES
+    - name: docs
+      install: pip install -r reqs/docs.txt
+      script: cd docs && python -m sphinx.cmd.build -M html . _build
 
 # install packages
 install:
