@@ -20,52 +20,59 @@ class Visitor(ast.NodeVisitor):
     """
 
     errors = attr.ib(default=attr.Factory(list))
+    is_pandas_import = attr.ib(default=attr.Factory(list))
 
     def visit_Import(self, node):
         """
         Called for `import ..` and `import .. as ..` nodes.
         """
         self.generic_visit(node)  # continue checking children
-        self.errors.extend(check_import_name(node))
+        import_error, imports_pandas = check_import_name(node)
+        self.errors.extend(import_error)
+        self.is_pandas_import.extend(imports_pandas)
 
     def visit_Call(self, node):
         """
         Called for `.method()` nodes.
         """
         self.generic_visit(node)  # continue checking children
-        self.errors.extend(check_inplace_false(node))
-        self.errors.extend(check_for_isnull(node))
-        self.errors.extend(check_for_notnull(node))
-        self.errors.extend(check_for_pivot(node))
-        self.errors.extend(check_for_unstack(node))
-        self.errors.extend(check_for_stack(node))
-        self.errors.extend(check_for_arithmetic_methods(node))
-        self.errors.extend(check_for_comparison_methods(node))
-        self.errors.extend(check_for_read_table(node))
-        self.errors.extend(check_for_merge(node))
+        if any(self.is_pandas_import):
+            self.errors.extend(check_inplace_false(node))
+            self.errors.extend(check_for_isnull(node))
+            self.errors.extend(check_for_notnull(node))
+            self.errors.extend(check_for_pivot(node))
+            self.errors.extend(check_for_unstack(node))
+            self.errors.extend(check_for_stack(node))
+            self.errors.extend(check_for_arithmetic_methods(node))
+            self.errors.extend(check_for_comparison_methods(node))
+            self.errors.extend(check_for_read_table(node))
+            self.errors.extend(check_for_merge(node))
 
     def visit_Subscript(self, node):
         """
         Called for `[slicing]` nodes.
         """
         self.generic_visit(node)  # continue checking children
-        self.errors.extend(check_for_ix(node))
-        self.errors.extend(check_for_at(node))
-        self.errors.extend(check_for_iat(node))
+        if any(self.is_pandas_import):
+            self.errors.extend(check_for_ix(node))
+            self.errors.extend(check_for_at(node))
+            self.errors.extend(check_for_iat(node))
 
     def visit_Attribute(self, node):
         """
         Called for `.attribute` nodes.
         """
         self.generic_visit(node)  # continue checking children
-        self.errors.extend(check_for_values(node))
+        if any(self.is_pandas_import):
+            self.errors.extend(check_for_values(node))
 
     def visit_Name(self, node):
         """
         Called for `Assignment` nodes.
         """
         self.generic_visit(node)  # continue checking children
-        self.errors.extend(check_for_df(node))
+        if any(self.is_pandas_import):
+            self.errors.extend(check_for_df(node))
 
     def check(self, node):
         self.errors = []
@@ -96,10 +103,7 @@ class VetPlugin:
         optmanager.extend_default_ignore(disabled_by_default)
 
         optmanager.add_option(
-            long_option_name="--annoy",
-            action="store_true",
-            dest="annoy",
-            default=False,
+            long_option_name="--annoy", action="store_true", dest="annoy", default=False
         )
 
         options, xargs = optmanager.parse_args()
@@ -116,10 +120,13 @@ def check_import_name(node: ast.Import) -> List:
     :return errors: list of errors of type PD001 with line number and column offset
     """
     errors = []
+    imports_pandas = False
     for n in node.names:
-        if n.name == "pandas" and n.asname != "pd":
-            errors.append(PD001(node.lineno, node.col_offset))
-    return errors
+        if n.name == "pandas":
+            imports_pandas = True
+            if n.asname != "pd":
+                errors.append(PD001(node.lineno, node.col_offset))
+    return errors, imports_pandas
 
 
 def check_inplace_false(node: ast.Call) -> List:
@@ -201,10 +208,7 @@ def check_for_arithmetic_methods(node: ast.Call) -> List:
         "mod",
     ]
 
-    if (
-        isinstance(node.func, ast.Attribute)
-        and node.func.attr in arithmetic_methods
-    ):
+    if isinstance(node.func, ast.Attribute) and node.func.attr in arithmetic_methods:
         return [PD005(node.lineno, node.col_offset)]
     return []
 
@@ -217,10 +221,7 @@ def check_for_comparison_methods(node: ast.Call) -> List:
     """
     comparison_methods = ["gt", "lt", "ge", "le", "eq", "ne"]
 
-    if (
-        isinstance(node.func, ast.Attribute)
-        and node.func.attr in comparison_methods
-    ):
+    if isinstance(node.func, ast.Attribute) and node.func.attr in comparison_methods:
         return [PD006(node.lineno, node.col_offset)]
     return []
 
@@ -357,34 +358,20 @@ VetError = partial(partial, error, type=VetPlugin)
 
 disabled_by_default = ["PD9"]
 
-PD001 = VetError(
-    message="PD001 pandas should always be imported as 'import pandas as pd'"
-)
+PD001 = VetError(message="PD001 pandas should always be imported as 'import pandas as pd'")
 
-PD002 = VetError(
-    message="PD002 'inplace = True' should be avoided; it has inconsistent behavior"
-)
+PD002 = VetError(message="PD002 'inplace = True' should be avoided; it has inconsistent behavior")
 
-PD003 = VetError(
-    message="PD003 '.isna' is preferred to '.isnull'; functionality is equivalent"
-)
+PD003 = VetError(message="PD003 '.isna' is preferred to '.isnull'; functionality is equivalent")
 
-PD004 = VetError(
-    message="PD004 '.notna' is preferred to '.notnull'; functionality is equivalent"
-)
+PD004 = VetError(message="PD004 '.notna' is preferred to '.notnull'; functionality is equivalent")
 PD005 = VetError(message="PD005 Use arithmetic operator instead of method")
 
 PD006 = VetError(message="PD006 Use comparison operator instead of method")
 
-PD007 = VetError(
-    message="PD007 '.ix' is deprecated; use more explicit '.loc' or '.iloc'"
-)
-PD008 = VetError(
-    message="PD008 Use '.loc' instead of '.at'.  If speed is important, use numpy."
-)
-PD009 = VetError(
-    message="PD009 Use '.iloc' instead of '.iat'.  If speed is important, use numpy."
-)
+PD007 = VetError(message="PD007 '.ix' is deprecated; use more explicit '.loc' or '.iloc'")
+PD008 = VetError(message="PD008 Use '.loc' instead of '.at'.  If speed is important, use numpy.")
+PD009 = VetError(message="PD009 Use '.iloc' instead of '.iat'.  If speed is important, use numpy.")
 PD010 = VetError(
     message="PD010 '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
 )
@@ -394,13 +381,10 @@ PD011 = VetError(
 PD012 = VetError(
     message="PDO12 '.read_csv' is preferred to '.read_table'; provides same functionality"
 )
-PD013 = VetError(
-    message="PD013 '.melt' is preferred to '.stack'; provides same functionality"
-)
+PD013 = VetError(message="PD013 '.melt' is preferred to '.stack'; provides same functionality")
 PD015 = VetError(
     message="PD015 Use '.merge' method instead of 'pd.merge' function. They have equivalent functionality."
 )
 
-PD901 = VetError(
-    message="PD901 'df' is a bad variable name. Be kinder to your future self."
-)
+PD901 = VetError(message="PD901 'df' is a bad variable name. Be kinder to your future self.")
+
