@@ -10,8 +10,7 @@ Welcome to pandas-vet's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-.. automodule:: pandas_vet
-    :members:
+   autoapi/index.rst
 
 
 Indices and tables

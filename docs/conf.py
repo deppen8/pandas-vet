@@ -10,9 +10,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import os.path
+# import sys
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 # -- Project information -----------------------------------------------------
@@ -31,7 +31,7 @@ release = '0.2.2'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
+    'autoapi.extension',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -57,3 +57,7 @@ html_static_path = ['_static']
 
 
 # -- Extension configuration -------------------------------------------------
+
+autoapi_dirs = [
+    os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'pandas_vet'))
+]
