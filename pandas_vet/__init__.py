@@ -120,10 +120,10 @@ def check_import_name(node: ast.Import) -> List:
     :return errors: list of errors of type PD001 with line number and column offset
     """
     errors = []
-    imports_pandas = False
+    imports_pandas = [False]
     for n in node.names:
         if n.name == "pandas":
-            imports_pandas = True
+            imports_pandas = [True]
             if n.asname != "pd":
                 errors.append(PD001(node.lineno, node.col_offset))
     return errors, imports_pandas
