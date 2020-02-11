@@ -119,6 +119,16 @@ black --check pandas_vet setup.py tests --exclude tests/data
 - [Aly Sivji](https://twitter.com/CaiusSivjus)
 - Tim Smith
 
+### PyCascades 2020 sprints team
+
+- dat-boris
+- [Jacob Deppen](https://twitter.com/jacob_deppen)
+- jvano74
+- keturn
+- Rhornberger
+- tojo13
+- [Walt](https://github.com/wadells)
+
 ### Other awesome contributors
 
 - Earl Clark
