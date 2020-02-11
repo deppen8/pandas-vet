@@ -68,22 +68,30 @@ Because this project started during the PyCascades 2019 sprints, we adopt the Py
 
 3. Get a development environment set up with your favorite environment manager (`conda`, `virtualenv`, etc.). 
 
-    1. You can create one from `pip install -r requirements_test.txt` or, if you use Docker, you can build an image from the Dockerfile included in this repo.
+    0. You must use at least python 3.6 to develop, for [black](https://github.com/psf/black) support.
+
+    1. You can create one from `pip install -r requirements_dev.txt` or, if you use Docker, you can build an image from the Dockerfile included in this repo.
 
     2. Once your enviroment is set up you will need to install pandas-vet in development mode. Use `pip install -e .` (use this if you are alreay in your virtual enviroment) or `pip install -e <path>` (use this one if not in the virtual enviroment and prefer to state explicitly where it is going).
 
 
 4. Write code, docs, etc.
 
-5. We use `pytest` and `flake8` to validate our codebase. The TravisCI integration will complain on pull requests if there are any failing tests or lint violations. To check these locally, run the following commands:
+5. We use `pytest`, `flake8`, and `black` to validate our codebase. TravisCI integration will complain on pull requests if there are any failing tests or lint violations. To check these locally, run the following commands:
 
 ```bash
-pytest tests
+pytest --cov=pandas_vet
 ```
 
 ```bash
 flake8 pandas_vet setup.py tests --exclude tests/data
 ```
+
+```bash
+black --check pandas_vet setup.py tests --exclude tests/data
+```
+
+
 
 6. Push to your forked repo.
 
@@ -110,6 +118,16 @@ flake8 pandas_vet setup.py tests --exclude tests/data
 - Charles Simchick
 - [Aly Sivji](https://twitter.com/CaiusSivjus)
 - Tim Smith
+
+### PyCascades 2020 sprints team
+
+- dat-boris
+- [Jacob Deppen](https://twitter.com/jacob_deppen)
+- jvano74
+- keturn
+- Rhornberger
+- tojo13
+- [Walt](https://github.com/wadells)
 
 ### Other awesome contributors
 

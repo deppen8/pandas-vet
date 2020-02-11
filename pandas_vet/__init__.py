@@ -159,7 +159,8 @@ def check_for_isnull(node: ast.Call) -> List:
     Approved:
         df.isna()
 
-    Error/warning message to recommend usage of .isna() instead of .isnull(). Functionality is equivalent
+    Error/warning message to recommend usage of .isna() instead of .isnull().
+    Functionality is equivalent.
 
     :param node: an AST node of type Call
     :return errors: list of errors of type PD003 with line number and column offset
@@ -178,7 +179,8 @@ def check_for_notnull(node: ast.Call) -> List:
     Approved:
         df.notna()
 
-    Error/warning message to recommend usage of .notna() instead of .notnull(). Functionality is equivalent
+    Error/warning message to recommend usage of .notna() instead of .notnull().
+    Functionality is equivalent.
 
     :param node: an AST node of type Call
     :return errors: list of errors of type PD004 with line number and column offset
@@ -373,7 +375,8 @@ PD007 = VetError(message="PD007 '.ix' is deprecated; use more explicit '.loc' or
 PD008 = VetError(message="PD008 Use '.loc' instead of '.at'.  If speed is important, use numpy.")
 PD009 = VetError(message="PD009 Use '.iloc' instead of '.iat'.  If speed is important, use numpy.")
 PD010 = VetError(
-    message="PD010 '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality"
+    message="PD010 '.pivot_table' is preferred to '.pivot' or '.unstack'; "
+    "provides same functionality"
 )
 PD011 = VetError(
     message="PD011 Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous"
@@ -383,7 +386,8 @@ PD012 = VetError(
 )
 PD013 = VetError(message="PD013 '.melt' is preferred to '.stack'; provides same functionality")
 PD015 = VetError(
-    message="PD015 Use '.merge' method instead of 'pd.merge' function. They have equivalent functionality."
+    message="PD015 Use '.merge' method instead of 'pd.merge' function. "
+    "They have equivalent functionality."
 )
 
 PD901 = VetError(message="PD901 'df' is a bad variable name. Be kinder to your future self.")
