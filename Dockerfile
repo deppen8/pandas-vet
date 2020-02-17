@@ -5,7 +5,7 @@ COPY . /pandas-vet
 WORKDIR /pandas-vet
 
 # Install required packages
-RUN pip install --no-cache-dir -r /pandas-vet/requirements_test.txt
+RUN pip install --no-cache-dir -r /pandas-vet/requirements_dev.txt
 
 # Install black manually
 # Keeping it out of requirements_test.txt avoids a predictable Travis failure
