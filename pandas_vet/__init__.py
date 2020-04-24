@@ -102,7 +102,8 @@ class VetPlugin:
             default=False,
         )
 
-        options, xargs = optmanager.parse_args()
+    @staticmethod
+    def parse_options(optmanager, options, extra_args):
         if options.annoy:
             optmanager.remove_from_default_ignore(disabled_by_default)
 
