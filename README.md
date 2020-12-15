@@ -1,6 +1,7 @@
 # pandas-vet
 
-[![Build Status](https://travis-ci.org/deppen8/pandas-vet.svg?branch=master)](https://travis-ci.org/deppen8/pandas-vet)
+![Lint and test](https://github.com/deppen8/pandas-vet/workflows/Lint%20and%20test/badge.svg
+)
 [![PyPI - License](https://img.shields.io/pypi/l/pandas-vet.svg)](https://github.com/deppen8/pandas-vet/blob/master/LICENSE)
 
 [![PyPI](https://img.shields.io/pypi/v/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
@@ -38,7 +39,7 @@ It can also be installed with `conda`:
 conda install -c conda-forge pandas-vet
 ```
 
-`pandas-vet` is tested under Python 3.5, 3.6, 3.7, 3.8, as defined in our [.travis.yml](https://github.com/deppen8/pandas-vet/blob/master/.travis.yml#L8-L12)
+`pandas-vet` is tested under Python 3.6, 3.7, 3.8, and 3.9 as defined in our [GitHub Actions](https://github.com/deppen8/pandas-vet/blob/master/.github/workflows/testing.yml)
 
 ## Usage
 
@@ -66,7 +67,7 @@ Because this project started during the PyCascades 2019 sprints, we adopt the Py
 
 2. Fork the repo and create a new branch for your enhancement/fix.
 
-3. Get a development environment set up with your favorite environment manager (`conda`, `virtualenv`, etc.). 
+3. Get a development environment set up with your favorite environment manager (`conda`, `virtualenv`, etc.).
 
     0. You must use at least python 3.6 to develop, for [black](https://github.com/psf/black) support.
 
@@ -80,7 +81,7 @@ Because this project started during the PyCascades 2019 sprints, we adopt the Py
 5. We use `pytest`, `flake8`, and `black` to validate our codebase. TravisCI integration will complain on pull requests if there are any failing tests or lint violations. To check these locally, run the following commands:
 
 ```bash
-pytest --cov=pandas_vet
+pytest --cov="pandas_vet"
 ```
 
 ```bash
