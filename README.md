@@ -1,8 +1,9 @@
 # pandas-vet
 
-![Lint and test](https://github.com/deppen8/pandas-vet/workflows/Lint%20and%20test/badge.svg
+![tests](https://github.com/deppen8/pandas-vet/workflows/Lint%20and%20test/badge.svg
 )
 [![codecov](https://codecov.io/gh/deppen8/pandas-vet/branch/master/graph/badge.svg?token=VgpjplhNr0)](https://codecov.io/gh/deppen8/pandas-vet)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI - License](https://img.shields.io/pypi/l/pandas-vet.svg)](https://github.com/deppen8/pandas-vet/blob/master/LICENSE)
 
 [![PyPI](https://img.shields.io/pypi/v/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
