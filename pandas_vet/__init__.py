@@ -72,6 +72,18 @@ class Visitor(ast.NodeVisitor):
         self.visit(node)
         return self.errors
 
+    def generic_visit(self, node):
+        """Called if no explicit visitor function exists for a node."""
+        for field, value in ast.iter_fields(node):
+            if isinstance(value, list):
+                for item in value:
+                    if isinstance(item, ast.AST):
+                        item.__pandas_vet_parent = node
+                        self.visit(item)
+            elif isinstance(value, ast.AST):
+                value.__pandas_vet_parent = node
+                self.visit(value)
+
 
 class PandasVetException(Exception):
     pass
@@ -297,6 +309,14 @@ def check_for_values(node: ast.Attribute) -> List:
     for PandasArray, or `.to_array()` method for NumPy array.
     """
     if node.attr == "values":
+        parent = getattr(node, "_Visitor__pandas_vet_parent")
+        if (
+            parent
+            and isinstance(parent, ast.Call)
+            and isinstance(parent.func, ast.Attribute)
+            and parent.func.attr == "values"
+        ):
+            return []
         return [PD011(node.lineno, node.col_offset)]
     return []
 
