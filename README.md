@@ -136,6 +136,7 @@ black --check pandas_vet setup.py tests --exclude tests/data
 
 - Earl Clark
 - Leandro Leites
+- pwoolvett
 
 ## List of warnings
 
