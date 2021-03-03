@@ -72,6 +72,28 @@ class Visitor(ast.NodeVisitor):
         self.visit(node)
         return self.errors
 
+    def generic_visit(self, node):
+        """Called if no explicit visitor function exists for a node.
+
+        This also attaches breadcrumbs before visiting a node so we can
+        later look up the syntax tree. This way, there's more
+        information to decide whether or not to raise.
+
+        The breadcrumb name is `__pandas_vet_parent` (name mangled) to
+        avoid all reasonable name collisions.
+
+        .. seealso:: `check_for_values`.
+        """
+        for field, value in ast.iter_fields(node):
+            if isinstance(value, list):
+                for item in value:
+                    if isinstance(item, ast.AST):
+                        item.__pandas_vet_parent = node
+                        self.visit(item)
+            elif isinstance(value, ast.AST):
+                value.__pandas_vet_parent = node
+                self.visit(value)
+
 
 class PandasVetException(Exception):
     pass
@@ -295,8 +317,23 @@ def check_for_values(node: ast.Attribute) -> List:
 
     Error/warning message to recommend use of `.array` data frame attribute
     for PandasArray, or `.to_array()` method for NumPy array.
+
+    In order to discriminate `df.values` (where this check should raise) vs
+    calls, like `dict().values()` (where this should not), this function
+    needs to check the node breadcrumb defined at `Visitor.generic_visit`,
+    raising only in the first case.
+
+    .. seealso:: `Visitor.generic_visit`.
     """
     if node.attr == "values":
+        parent = getattr(node, "_Visitor__pandas_vet_parent", None)
+        if (
+            parent
+            and isinstance(parent, ast.Call)
+            and isinstance(parent.func, ast.Attribute)
+            and parent.func.attr == "values"
+        ):
+            return []
         return [PD011(node.lineno, node.col_offset)]
     return []
 
