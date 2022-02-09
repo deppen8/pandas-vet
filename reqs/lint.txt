@@ -9,7 +9,7 @@ pycodestyle==2.5.0
 pyflakes==2.1.1
 
 # black, top level
-black==19.10b0
+black==21.12b0
 
 # black toolchain, transitive dependencies
 appdirs==1.4.3
