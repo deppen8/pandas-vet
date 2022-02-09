@@ -124,9 +124,16 @@ class VetPlugin:
             default=False,
         )
 
-        options, xargs = optmanager.parse_args()
-        if options.annoy:
-            optmanager.remove_from_default_ignore(disabled_by_default)
+    @staticmethod
+    def parse_options(optmanager, options, args):
+        """Receives the parsed options and values."""
+        if not options.annoy:
+            return
+        for v in disabled_by_default:
+            try:
+                options.ignore.remove(v)
+            except ValueError:
+                pass
 
 
 def check_import_name(node: ast.Import) -> List:
