@@ -322,8 +322,7 @@ def check_for_values(node: ast.Attribute) -> List:
     """
     Check occurence of the `.values` attribute on the pandas data frame.
 
-    Error/warning message to recommend use of `.array` data frame attribute
-    for PandasArray, or `.to_array()` method for NumPy array.
+    Error/warning message to recommend use of `.to_numpy()` method for NumPy array.
 
     In order to discriminate `df.values` (where this check should raise) vs
     calls, like `dict().values()` (where this should not), this function
@@ -430,7 +429,7 @@ PD010 = VetError(
     "provides same functionality"
 )
 PD011 = VetError(
-    message="PD011 Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous"
+    message="PD011 Use '.to_numpy()' instead of '.values'; 'values' is ambiguous"
 )
 PD012 = VetError(
     message="PDO12 '.read_csv' is preferred to '.read_table'; provides same functionality"

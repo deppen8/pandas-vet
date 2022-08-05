@@ -1,6 +1,5 @@
 """
-Test to check for use of the pandas dataframe `.array` attribute
-or `.to_array()` method in preference to `.values` attribute.
+Test to check for use of the pandas dataframe `.to_numpy()` method in preference to `.values` attribute.
 """
 import ast
 
@@ -8,22 +7,11 @@ from pandas_vet import VetPlugin
 from pandas_vet import PD011
 
 
-def test_PD011_pass_to_array():
+def test_PD011_pass_to_numpy():
     """
-    Test that using .to_array() explicitly does not result in an error.
+    Test that using .to_numpy() explicitly does not result in an error.
     """
     statement = "result = df.to_array()"
-    tree = ast.parse(statement)
-    actual = list(VetPlugin(tree).run())
-    expected = []
-    assert actual == expected
-
-
-def test_PD011_pass_array():
-    """
-    Test that using .array explicitly does not result in an error.
-    """
-    statement = "result = df.array"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = []
