@@ -173,7 +173,11 @@ def check_inplace_false(node: ast.Call) -> List:
     """
     errors = []
     for kw in node.keywords:
-        if kw.arg == "inplace" and kw.value.value is True:
+        if (
+            kw.arg == "inplace"
+            and hasattr(kw.value, "value")
+            and kw.value.value is True
+        ):
             errors.append(PD002(node.lineno, node.col_offset))
     return errors
 
