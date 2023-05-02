@@ -163,7 +163,7 @@ black --check pandas_vet setup.py tests --exclude tests/data
 
 **PD011** Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous
 
-**PDO12** '.read_csv' is preferred to '.read_table'; provides same functionality
+**PD012** '.read_csv' is preferred to '.read_table'; provides same functionality
 
 **PD013** '.melt' is preferred to '.stack'; provides same functionality
 
