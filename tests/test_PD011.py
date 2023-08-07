@@ -3,15 +3,14 @@ Test to check for use of the pandas dataframe `.to_numpy()` method in preference
 """
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD011
+from pandas_vet import PD011, VetPlugin
 
 
 def test_PD011_pass_to_numpy():
     """
     Test that using .to_numpy() explicitly does not result in an error.
     """
-    statement = "result = df.to_array()"
+    statement = "result = df.to_numpy()"
     tree = ast.parse(statement)
     actual = list(VetPlugin(tree).run())
     expected = []
