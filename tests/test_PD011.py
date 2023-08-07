@@ -1,5 +1,6 @@
 """
-Test to check for use of the pandas dataframe `.to_numpy()` method in preference to `.values` attribute.
+Test to check for use of the pandas dataframe `.to_numpy()` method in preference to `.values`
+attribute.
 """
 import ast
 
