@@ -15,8 +15,7 @@ check the type of the base object.
 """
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD015
+from pandas_vet import PD015, VetPlugin
 
 
 def test_PD015_pass_merge_on_dataframe():

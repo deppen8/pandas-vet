@@ -1,0 +1,93 @@
+[build-system]
+requires = ["hatchling", "hatch-regex-commit"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pandas-vet"
+description = "A flake8 plugin to lint pandas in an opinionated way."
+authors = [{ name = "Jacob Deppen", email = "deppen.8@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+keywords = ["flake8", "pandas", "pandas-vet", "linter", "qa"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Framework :: Flake8",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Quality Assurance",
+]
+# Dependencies for the package itself.
+dependencies = ["flake8>=6.0.0", "attrs>=19.2.0"]
+dynamic = ["version"]
+
+[project.entry-points."flake8.extension"]
+PD = "pandas_vet:VetPlugin"
+
+[project.urls]
+Homepage = "https://github.com/deppen8/pandas-vet"
+Issues = "https://github.com/deppen8/pandas-vet/issues"
+# Documentation = ""
+
+[tool.hatch.version]
+source = "regex_commit"
+path = "src/pandas_vet/__about__.py"
+tag_sign = false
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github", "/docs", "/tests"]
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src"]
+sources = ["src"]
+
+[tool.hatch.envs.default]
+dependencies = []
+
+[tool.hatch.envs.dev]
+# Extra dependencies for developing the package.
+extra-dependencies = [
+  "pytest",
+  "pytest-cov",
+  "isort>=5",
+  "black",
+  "flake8",
+  "jupyter-book",
+]
+
+[tool.hatch.envs.dev.scripts]
+check = ["flake8 .", "black --check --diff .", "isort --check-only --diff ."]
+format = ["isort .", "black .", "flake8 ."]
+_pytest = "pytest {args}"
+tests = ["mkdir -p results", "_pytest", "format"]
+docs = "jupyter-book build docs/"
+
+[[tool.hatch.envs.dev.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+include = ["*/src/pandas_vet/**/*.py"]
+omit = ["*/src/pandas_vet/__about__.py", "tests/*"]
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[tool.isort]
+profile = "black"
+skip = [".hatch"]
+
+[tool.pytest.ini_options]
+addopts = "-v --cov --cov-report xml:results/coverage.xml --cov-report html:results/cov_html --cov-report term-missing --junitxml=results/test.xml"
+junit_family = "xunit1"
+norecursedirs = "data"

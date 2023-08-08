@@ -4,8 +4,7 @@ method.
 """
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD012
+from pandas_vet import PD012, VetPlugin
 
 
 def test_PD012_pass_read_csv():

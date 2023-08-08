@@ -1,8 +1,7 @@
 # stdlib
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD007
+from pandas_vet import PD007, VetPlugin
 
 
 def test_PD007_pass_loc():

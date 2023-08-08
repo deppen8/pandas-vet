@@ -1,5 +1,0 @@
-# flake8, top level
-flake8==3.7.9
-
-# black, top level
-black==21.12b0

@@ -4,8 +4,7 @@ or `.to_array()` method in preference to `.values` attribute.
 """
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD011
+from pandas_vet import PD011, VetPlugin
 
 
 def test_PD011_pass_to_array():
