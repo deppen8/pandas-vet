@@ -5,8 +5,7 @@ Recommend use of binary comparison operators instead.
 """
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD006
+from pandas_vet import PD006, VetPlugin
 
 
 def test_PD006_pass_comparison_operator():

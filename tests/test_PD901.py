@@ -1,7 +1,6 @@
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD901
+from pandas_vet import PD901, VetPlugin
 
 
 def test_PD901_pass_non_df():

@@ -4,8 +4,7 @@ method in preference to either `.pivot()` or `.unstack()` methods.
 """
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD010
+from pandas_vet import PD010, VetPlugin
 
 
 def test_PD010_pass():

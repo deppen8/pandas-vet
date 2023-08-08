@@ -5,8 +5,7 @@ Recommend use of binary arithmetic operators instead.
 """
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD005
+from pandas_vet import PD005, VetPlugin
 
 
 def test_PD005_pass_arithmetic_operator():
