@@ -156,7 +156,7 @@ Because this project started during the PyCascades 2019 sprints, we adopt the Py
 
 **PD010** '.pivot_table' is preferred to '.pivot' or '.unstack'; provides same functionality
 
-**PD011** Use '.array' or '.to_array()' instead of '.values'; 'values' is ambiguous
+**PD011** Use '.to_numpy()' instead of '.values'; 'values' is ambiguous
 
 **PD012** '.read_csv' is preferred to '.read_table'; provides same functionality
 
