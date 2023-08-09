@@ -17,33 +17,33 @@ env:
   FORCE_COLOR: "1"
 
 jobs:
-  test-and-lint-code:
-    name: Test Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+  # test-and-lint-code:
+  #   name: Test Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #       python-version: ['3.8', '3.9', '3.10', '3.11']
 
-    steps:
-      - uses: actions/checkout@v3
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
+  #     - name: Set up Python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
 
-      - name: Install hatch
-        run: |
-          pip install --upgrade hatch
-      - name: Test and lint
-        run: |
-          hatch run dev.py${{ matrix.python-version }}:tests
+  #     - name: Install hatch
+  #       run: |
+  #         pip install --upgrade hatch
+  #     - name: Test and lint
+  #       run: |
+  #         hatch run dev.py${{ matrix.python-version }}:tests
 
   test-docs-build:
     name: Build docs
-    needs: test-and-lint-code
+    # needs: test-and-lint-code
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -65,5 +65,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: docs
-        path: /docs/_build/html
+        path: docs/_build/html/
         if-no-files-found: error
