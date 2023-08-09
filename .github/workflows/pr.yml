@@ -1,0 +1,22 @@
+name: Check PRs
+
+on:
+  pull_request:
+    branches:
+    - main
+
+concurrency:
+  group: test-${{ github.head_ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONUNBUFFERED: "1"
+  FORCE_COLOR: "1"
+
+jobs:
+  test-and-lint:
+    uses: ./.github/workflows/testing.yml
+
+  build-docs:
+    needs: test-and-lint
+    uses: ./.github/workflows/build_docs.yml

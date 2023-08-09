@@ -1,23 +1,16 @@
 name: Deploy docs to GitHub Pages
 
-on:
-  workflow_run:
-    workflows: ['Test and lint']
-    types:
-      - completed
+on: workflow_call
 
 jobs:
   deploy-book:
     name: Deploy docs
-    if: |
-        github.event.workflow_run.conclusion == 'success' &&
-        github.event_name == 'push' &&
-        github.head_ref == 'main'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
 
-    - uses: actions/download-artifact@v3
+    - name: Fetch docs artifacts
+      uses: actions/download-artifact@v3
       with:
         name: docs
 
