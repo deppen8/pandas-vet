@@ -13,6 +13,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: docs
+        path: docs/_build/html/
 
     # Push the book's HTML to github-pages
     - name: GitHub Pages action
