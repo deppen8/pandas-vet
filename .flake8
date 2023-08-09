@@ -10,7 +10,5 @@ ignore =
     # not compliant with black
 	E231
 exclude =
-    docs
-; per-file-ignores =
-;     # allow unused imports in init files
-; 	src/pandas_vet/__init__.py:F401
+	docs,
+	.hatch
