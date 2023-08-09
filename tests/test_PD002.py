@@ -1,8 +1,7 @@
 # stdlib
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD002
+from pandas_vet import PD002, VetPlugin
 
 
 def test_PD002_pass():

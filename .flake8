@@ -1,2 +1,16 @@
 [flake8]
-max-line-length = 100
+max-line-length = 119
+ignore =
+	# new line at end of file is good!!
+    W391
+	# not compliant with black or pep8 https://github.com/ambv/black/issues/113
+    W503
+    # not compliant with black
+	E203
+    # not compliant with black
+	E231
+exclude =
+    docs
+; per-file-ignores =
+;     # allow unused imports in init files
+; 	src/pandas_vet/__init__.py:F401

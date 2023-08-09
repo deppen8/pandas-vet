@@ -4,8 +4,7 @@ method in preference to `.stack()` method.
 """
 import ast
 
-from pandas_vet import VetPlugin
-from pandas_vet import PD013
+from pandas_vet import PD013, VetPlugin
 
 
 def test_PD013_pass():

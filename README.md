@@ -1,10 +1,9 @@
 # pandas-vet
 
-![tests](https://github.com/deppen8/pandas-vet/workflows/Lint%20and%20test/badge.svg
+![tests](https://github.com/deppen8/pandas-vet/workflows/Test%20and%20lint/badge.svg
 )
-[![codecov](https://codecov.io/gh/deppen8/pandas-vet/branch/master/graph/badge.svg?token=VgpjplhNr0)](https://codecov.io/gh/deppen8/pandas-vet)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![PyPI - License](https://img.shields.io/pypi/l/pandas-vet.svg)](https://github.com/deppen8/pandas-vet/blob/master/LICENSE)
+[![PyPI - License](https://img.shields.io/pypi/l/pandas-vet.svg)](https://github.com/deppen8/pandas-vet/blob/main/LICENSE)
 
 [![PyPI](https://img.shields.io/pypi/v/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
 [![PyPI - Status](https://img.shields.io/pypi/status/pandas-vet.svg)](https://pypi.org/project/pandas-vet/)
@@ -41,14 +40,14 @@ It can also be installed with `conda`:
 conda install -c conda-forge pandas-vet
 ```
 
-`pandas-vet` is tested under Python 3.6, 3.7, 3.8, and 3.9 as defined in our [GitHub Actions](https://github.com/deppen8/pandas-vet/blob/master/.github/workflows/testing.yml)
+`pandas-vet` is tested under Python 3.8, 3.9, 3.10, and 3.11 as defined in our [GitHub Actions](https://github.com/deppen8/pandas-vet/blob/main/.github/workflows/testing.yml)
 
 ## Usage
 
 Once installed successfully in an environment that also has `flake8` installed, `pandas-vet` should run whenever `flake8` is run.
 
 ```bash
-$ flake8 ...
+flake8 ...
 ```
 
 See the [`flake8` docs](http://flake8.pycqa.org/en/latest/user/invocation.html) for more information.
@@ -77,24 +76,21 @@ Because this project started during the PyCascades 2019 sprints, we adopt the Py
 
     2. Once your enviroment is set up you will need to install pandas-vet in development mode. Use `pip install -e .` (use this if you are alreay in your virtual enviroment) or `pip install -e <path>` (use this one if not in the virtual enviroment and prefer to state explicitly where it is going).
 
-
 4. Write code, docs, etc.
 
 5. We use `pytest`, `flake8`, and `black` to validate our codebase. TravisCI integration will complain on pull requests if there are any failing tests or lint violations. To check these locally, run the following commands:
 
-```bash
-pytest --cov="pandas_vet"
-```
+    ```bash
+    pytest --cov="pandas_vet"
+    ```
 
-```bash
-flake8 pandas_vet setup.py tests --exclude tests/data
-```
+    ```bash
+    flake8 pandas_vet setup.py tests --exclude tests/data
+    ```
 
-```bash
-black --check pandas_vet setup.py tests --exclude tests/data
-```
-
-
+    ```bash
+    black --check pandas_vet setup.py tests --exclude tests/data
+    ```
 
 6. Push to your forked repo.
 
@@ -109,7 +105,6 @@ black --check pandas_vet setup.py tests --exclude tests/data
 2. Write your check function in `/pandas-vet/__init__.py`.
 
 3. Run `flake8` and `pytest` on the linter itself (see [Steps to contributing](#steps-to-contributing))
-
 
 ## Contributors
 
@@ -174,7 +169,7 @@ black --check pandas_vet setup.py tests --exclude tests/data
 These warnings are turned off by default. To enable them, add the `-annoy` flag to your command, e.g.,
 
 ```bash
-$ flake8 --annoy my_file.py
+flake8 --annoy my_file.py
 ```
 
 **PD901** 'df' is a bad variable name. Be kinder to your future self.

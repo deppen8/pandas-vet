@@ -1,8 +1,0 @@
-# build toolchain, from virtualenv/python
-pip==20.0.2
-setuptools==45.2.0
-wheel==0.34.2
-
-# test toolchain, top level
-pytest==5.3.5
-pytest-cov==2.8.1
