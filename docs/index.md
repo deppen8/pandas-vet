@@ -1,0 +1,4 @@
+# pandas-vet Documentation
+
+```{tableofcontents}
+```
