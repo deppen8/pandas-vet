@@ -1,10 +1,10 @@
-# Development guide
+# Development
 
-## Access the repo
+Contributions are welcome from the community on code, tests, docs, and just about anything else.
 
-The `pandas-vet` repo lives in GitHub at [https://github.com/deppen8/pandas-vet](https://github.com/deppen8/pandas-vet).
+## Code of Conduct
 
-Clone the repo to get started.
+Because this project started during the PyCascades 2019 sprints, we adopt the PyCascades minimal expectation that we "Be excellent to each another". Beyond that, we follow the Python Software Foundation's [Community Code of Conduct](https://www.python.org/psf/codeofconduct/).
 
 ## Project management
 
@@ -20,50 +20,60 @@ The best way to install Hatch on your machine is to use [`pipx`](https://pipxpro
 pipx install hatch
 ```
 
-### Version bumping
+## Contribution workflow
 
-To bump the package version, run `hatch version <version_segment>`. For example, to bump the minor version number, run:
+1. Please submit an [Issue](https://github.com/deppen8/pandas-vet/issues) (or draft PR) first describing the types of changes you'd like to implement.
 
-```bash
-hatch version minor
-```
+2. Fork the GitHub repository.
 
-This will bump the version number in the `pyproject.toml` file and elsewhere.
+3. Create a new branch for your enhancement/fix.
 
-```{note}
-You can also bump using the full version string, e.g., `hatch version 0.1.0`. See the full [Hatch versioning documentation](https://hatch.pypa.io/latest/version) for more details.
-```
+4. Write code, [tests](tests), [docs](documentation), etc. See [How to add a check to the linter](linter-check).
 
-### Build the package
+5. We use `pytest`, `flake8`, `isort`, and `black` to test, lint, and format our codebase. You can invoke these with a single Hatch command from the root of the repository.
 
-Building the package is as simple as running `hatch build` from the root of the repo. This will build both sdist and wheel versions of the package and place them in the `/dist` directory.
+    ```bash
+    hatch run dev:tests
+    ```
 
-```bash
-hatch build
-```
+    This command will build the necessary virtual environments, install the package in editable mode, and run the tests, linting, and formatting checks.
 
-```{note}
-See the full [Hatch build documentation](https://hatch.pypa.io/latest/build) for more details.
-```
+    These are the same commands that are run in the CI/CD pipeline. See the [Tests](tests) section below for more details.
 
-### Custom scripts
+6. Push your branch to your forked repository.
 
-We have a few predefined scripts that are useful for development. These are defined in the `pyproject.toml` file and can be run with `hatch run <env_name>:<script_name>`. For example, to run a combination of `isort`, `black`, and `flake8` you can run:
+7. Submit a pull request to the parent repository from your branch. Be sure to write a clear message and reference any Issue # that relates to your pull request.
+
+8. Feel good about giving back to open source projects.
+
+(linter-check)=
+
+## How to add a check to the linter
+
+1. Write tests. At a *minimum*, you should have test cases where the linter should catch "bad" `pandas` and test cases where the linter should allow "good" `pandas`.
+
+2. Write your check function in `/pandas-vet/__init__.py`.
+
+3. Run `hatch run dev:tests` and fix any errors.
+
+## Custom scripts
+
+In addition to the `tests` script used in CI/CD, we have a few predefined scripts that are useful for development. These are defined in the `pyproject.toml` file and can be run with `hatch run dev:<script_name>`. For example, to run a combination of `isort`, `black`, and `flake8` you can run:
 
 ```bash
 hatch run dev:format
 ```
 
-These are the same scripts that are run in the CI/CD pipeline.
-
 The available custom scripts are:
 
 - `check` - Run `isort`, `black`, and `flake8` without making changes (i.e., a dry-run).
 - `format` - Run `isort`, `black`, and `flake8`.
+- `tests` - Run the test suite and format.
 - `docs` - Build the docs with Jupyter Book.
-- `tests` - Run the test suite.
 
-### Testing
+(tests)=
+
+## Tests
 
 We use `pytest` for testing. Tests live in the `/tests` directory. The use of [`pytest` fixtures](https://docs.pytest.org/en/stable/explanation/fixtures.html) is encouraged and these should typically be stored in `/tests/conftest.py`, though in some limited cases could be isolated to a particular test module.
 
@@ -85,21 +95,23 @@ Coverage XML written to file results/coverage.xml
 ```
 ````
 
-### Documentation
+(documentation)=
+
+## Documentation
 
 The documentation is built with a combination of docstrings in Google docstring format and Jupyter Book deployment. Jupyter Book provides an easy way to combine traditional API docs built with Sphinx, Markdown docs like this page, and Jupyter Notebook guides/tutorials.
 
-#### Docstrings
+### Docstrings
 
 Docstrings should use the [Google docstring style](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html). Each class and function should have a docstring.
 
-When the docs are built with Jupyter Book, these Sphinx will detect them and turn them into some nicely-formatted API docs.
+When the docs are built with Jupyter Book, Sphinx will detect the docstrings and turn them into some nicely-formatted API docs.
 
-#### Jupyter Book
+### Jupyter Book
 
-[Jupyter Book](https://jupyterbook.org/intro.html) provides the engine for the docs. Documentation pages can be written in reStructuredText, Markdown, or Jupyter Notebooks. See the Jupyter Book documentation for additional features available.
+[Jupyter Book](https://jupyterbook.org/intro.html) provides the engine for the docs. Documentation pages can be written in reStructuredText, Markdown, or Jupyter Notebooks. See the [Jupyter Book documentation](https://jupyterbook.org/intro.html) for additional features available.
 
-#### Build the docs locally
+### Build the docs locally
 
 The docs are built and deployed to GitLab Pages as part of the CI/CD pipeline in GitLab. However, if you'd like to examine them locally, you can build them yourself with `hatch run dev:docs`, e.g.,
 
@@ -159,4 +171,8 @@ Any errors in the build will be logged as part of this output.
 
 ## CI/CD
 
-CI/CD is handled by GitHub Actions. Configuration can be found in the `.github/workflows/testing.yml` file.
+CI/CD is handled by GitHub Actions. Configuration can be found in the `.github/workflows/` folder.
+
+When a pull request is submitted, the code is tested, linted, and formatted (`hatch run dev:tests`) and the docs are built (`hatch run dev:docs`). If any of these steps fail, the pull request will be marked as failing.
+
+When a pull request is merged into the `main` branch, the code is tested, linted, and formatted (`hatch run dev:tests`), the docs are built (`hatch run dev:docs`), and the docs are deployed to GitHub Pages.
