@@ -18,7 +18,7 @@ env:
 
 jobs:
   test-and-lint-code:
-    name: Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
+    name: Test Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -42,6 +42,7 @@ jobs:
           hatch run dev.py${{ matrix.python-version }}:tests
 
   test-docs-build:
+    name: Build docs
     needs: test-and-lint-code
     runs-on: ubuntu-latest
     steps:
@@ -64,5 +65,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: docs
-        path: ./_build/html
+        path: /docs/_build/html
         if-no-files-found: error
