@@ -17,8 +17,8 @@ env:
   FORCE_COLOR: "1"
 
 jobs:
-  test-and-lint:
-    name: Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
+  test-and-lint-code:
+    name: Test Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -40,3 +40,30 @@ jobs:
       - name: Test and lint
         run: |
           hatch run dev.py${{ matrix.python-version }}:tests
+
+  test-docs-build:
+    name: Build docs
+    needs: test-and-lint-code
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install hatch
+      run: |
+        pip install --upgrade hatch
+
+    - name: Build the book
+      run: |
+        hatch run dev.py3.10:docs
+
+    - name: Keep docs as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: docs
+        path: docs/_build/html/
+        if-no-files-found: error

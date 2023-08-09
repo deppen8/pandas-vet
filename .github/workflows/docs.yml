@@ -1,0 +1,29 @@
+name: Deploy docs to GitHub Pages
+
+on:
+  workflow_run:
+    workflows: ['Test and lint']
+    types:
+      - completed
+
+jobs:
+  deploy-book:
+    name: Deploy docs
+    if: |
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event_name == 'push' &&
+        github.head_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/download-artifact@v3
+      with:
+        name: docs
+
+    # Push the book's HTML to github-pages
+    - name: GitHub Pages action
+      uses: peaceiris/actions-gh-pages@v3.9.3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html/
