@@ -8,6 +8,7 @@ on:
 
 jobs:
   deploy-book:
+    name: Deploy docs
     if: |
         github.event.workflow_run.conclusion == 'success' &&
         github.event_name == 'push' &&
@@ -25,4 +26,4 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3.9.3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs/_build/html
+        publish_dir: docs/_build/html/
