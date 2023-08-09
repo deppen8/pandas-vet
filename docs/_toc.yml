@@ -4,7 +4,9 @@ parts:
   - caption: Guides
     chapters:
       - file: guides/install
+      - file: guides/warnings
       - file: guides/dev
+      - file: guides/contributors
   - caption: API docs
     chapters:
       - glob: api/*
