@@ -1,9 +1,4 @@
 #######################################################################################
-# A default configuration that will be loaded for all jupyter books
-# Users are expected to override these values in their own `_config.yml` file.
-# This is also the "master list" of all allowed keys and values.
-
-#######################################################################################
 # Book settings
 title: "pandas-vet" # The title of the book. Will be placed in the left navbar.
 author: "Jacob Deppen" # The author of the book
@@ -12,7 +7,7 @@ logo: "" # A path to the book logo
 # Patterns to skip when building the book. Can be glob-style (e.g. "*skip.ipynb")
 exclude_patterns: [_build, Thumbs.db, .DS_Store, "**.ipynb_checkpoints", "tmp/"]
 # Auto-exclude files not in the toc
-only_build_toc_files: true
+only_build_toc_files: false
 
 #######################################################################################
 # Execution settings
