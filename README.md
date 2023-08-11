@@ -53,7 +53,7 @@ ab_dataset = pd.DataFrame({
 a_dataset = ab_dataset.drop(columns='col_b')
 ```
 
-For a full list, see the [Supported warnings](https://deppen8.github.io/pandas-vet/guides/warnings.html) page of the documentation.
+For a full list, see the [Supported warnings](https://pandas-vet.readthedocs.io/en/stable/guides/warnings.html) page of the documentation.
 
 ## Motivation
 
