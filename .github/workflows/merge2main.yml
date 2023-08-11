@@ -1,4 +1,4 @@
-name: Double-check PRs and deploy docs
+name: Double-check PRs
 
 on:
   push:
@@ -20,7 +20,3 @@ jobs:
   build-docs:
     needs: test-and-lint
     uses: ./.github/workflows/build_docs.yml
-
-  deploy-docs:
-    needs: build-docs
-    uses: ./.github/workflows/deploy_docs.yml
