@@ -2,7 +2,7 @@
 
 `pandas-vet` is a plugin for `flake8` that provides opinionated linting for `pandas` code.
 
-[![docs](https://img.shields.io/badge/deppen8.github.io%2Fpandas--vet-181717?logo=githubpages&label=docs)](https://deppen8.github.io/pandas-vet)
+[![Documentation Status](https://readthedocs.org/projects/pandas-vet/badge/?version=stable)](https://pandas-vet.readthedocs.io/en/latest/?badge=stable)
 
 [![Test and lint](https://github.com/deppen8/pandas-vet/actions/workflows/testing.yml/badge.svg)](https://github.com/deppen8/pandas-vet/actions/workflows/testing.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
